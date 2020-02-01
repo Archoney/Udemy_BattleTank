@@ -32,3 +32,8 @@ void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+void ATankPawn::AimAt(const FVector& targetLocation)
+{
+	UE_LOG(LogTemp, Warning, TEXT("%s is aiming at: %s"), *GetName(), *targetLocation.ToString());
+}
+
