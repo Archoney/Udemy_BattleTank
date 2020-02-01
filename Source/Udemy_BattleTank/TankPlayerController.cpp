@@ -7,11 +7,12 @@
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	check(GetTankPawn() && "PlayerController do not possess anything!");
+	GetControlledTank();
 }
 
-ATankPawn* ATankPlayerController::GetTankPawn() const
+ATankPawn* ATankPlayerController::GetControlledTank() const
 {
-	return Cast<ATankPawn>(GetPawn());
+	static auto controlledTank = Cast<ATankPawn>(GetPawn());
+	check(controlledTank && "PlayerController do not possess any tank!");
+	return controlledTank;
 }

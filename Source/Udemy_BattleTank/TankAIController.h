@@ -19,5 +19,6 @@ class UDEMY_BATTLETANK_API ATankAIController : public AAIController
 public:
 	void BeginPlay() override;
 
-	ATankPawn* GetTankPawn() const;
+	ATankPawn* GetControlledTank() const;
+	ATankPawn* GetPlayerTank() const;
 };
