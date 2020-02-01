@@ -6,7 +6,8 @@
 #include "Engine/World.h"
 #include "Camera/PlayerCameraManager.h"
 
-#include "DrawDebugHelpers.h"
+// DEBUG
+// #include "DrawDebugHelpers.h"
 
 void ATankPlayerController::BeginPlay()
 {
@@ -31,7 +32,8 @@ void ATankPlayerController::AimAtCrosshair()
 	auto hitLocation = GetSightRayHitLocation();
 	if (hitLocation)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Hit location: %s"), *hitLocation.GetValue().ToString());
+		// DEBUG
+		// UE_LOG(LogTemp, Warning, TEXT("Hit location: %s"), *hitLocation.GetValue().ToString());
 	}
 }
 
@@ -78,8 +80,9 @@ TOptional<FVector> ATankPlayerController::GetLookVectorHitLocation(const FVector
 
 	if (GetWorld()->LineTraceSingleByChannel(hitResult, lineTraceStart, lineTraceEnd, ECC_Visibility))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Object hit: %s"), *hitResult.GetActor()->GetFullName());
-		DrawDebugLine(GetWorld(), lineTraceStart, lineTraceEnd, FColor(1.0f, 0.0f, 0.0f, 1.0f), false, -1.0f, 0, 10.0f);
+		// DEBUG
+		// UE_LOG(LogTemp, Warning, TEXT("Object hit: %s"), *hitResult.GetActor()->GetFullName());
+		// DrawDebugLine(GetWorld(), lineTraceStart, lineTraceEnd, FColor(1.0f, 0.0f, 0.0f, 1.0f), false, -1.0f, 0, 10.0f);
 		return hitResult.Location;
 	}
 
