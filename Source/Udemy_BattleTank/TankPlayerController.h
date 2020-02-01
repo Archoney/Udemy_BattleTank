@@ -24,6 +24,7 @@ public:
 	void AimAtCrosshair();
 	TOptional<FVector> GetSightRayHitLocation() const;
 	TOptional<FVector> GetLookDirection() const;
+	TOptional<FVector> GetLookVectorHitLocation(const FVector& lookDirection) const;
 
 protected:
 	UFUNCTION(BlueprintCallable)

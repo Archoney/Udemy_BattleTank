@@ -3,6 +3,10 @@
 
 #include "TankPlayerController.h"
 #include "TankPawn.h"
+#include "Engine/World.h"
+#include "Camera/PlayerCameraManager.h"
+
+#include "DrawDebugHelpers.h"
 
 void ATankPlayerController::BeginPlay()
 {
@@ -27,7 +31,7 @@ void ATankPlayerController::AimAtCrosshair()
 	auto hitLocation = GetSightRayHitLocation();
 	if (hitLocation)
 	{
-		// Aim at hit location
+		UE_LOG(LogTemp, Warning, TEXT("Hit location: %s"), *hitLocation.GetValue().ToString());
 	}
 }
 
@@ -36,7 +40,7 @@ TOptional<FVector> ATankPlayerController::GetSightRayHitLocation() const
 	auto lookDirection = GetLookDirection();
 	if (lookDirection)
 	{
-
+		return GetLookVectorHitLocation(lookDirection.GetValue());
 	}
 	return TOptional<FVector>();
 }
@@ -50,7 +54,7 @@ TOptional<FVector> ATankPlayerController::GetLookDirection() const
 
 		auto crosshairViewportPosition = FVector2D{
 			viewportSizeX * m_crosshairCanvasPosition.GetValue().X,
-			viewportSizeX * m_crosshairCanvasPosition.GetValue().Y };
+			viewportSizeY * m_crosshairCanvasPosition.GetValue().Y };
 
 		FVector worldLocation, worldDirection;
 		DeprojectScreenPositionToWorld(
@@ -62,6 +66,23 @@ TOptional<FVector> ATankPlayerController::GetLookDirection() const
 
 		return worldDirection;
 	}
+	return TOptional<FVector>();
+}
+
+TOptional<FVector> ATankPlayerController::GetLookVectorHitLocation(const FVector& lookDirection) const
+{
+	FHitResult hitResult;
+	auto lineTraceStart = PlayerCameraManager->GetCameraLocation();
+	auto lineTraceLength = 1000000.0f;
+	auto lineTraceEnd = lineTraceStart + lookDirection * lineTraceLength;
+
+	if (GetWorld()->LineTraceSingleByChannel(hitResult, lineTraceStart, lineTraceEnd, ECC_Visibility))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Object hit: %s"), *hitResult.GetActor()->GetFullName());
+		DrawDebugLine(GetWorld(), lineTraceStart, lineTraceEnd, FColor(1.0f, 0.0f, 0.0f, 1.0f), false, -1.0f, 0, 10.0f);
+		return hitResult.Location;
+	}
+
 	return TOptional<FVector>();
 }
 
