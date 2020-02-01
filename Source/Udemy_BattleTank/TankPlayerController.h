@@ -18,6 +18,15 @@ class UDEMY_BATTLETANK_API ATankPlayerController : public APlayerController
 	
 public:
 	void BeginPlay() override;
+	void Tick(float DeltaSeconds) override;
 
 	ATankPawn* GetControlledTank() const;
+	void AimAtCrosshair();
+	TOptional< FVector> GetSightRayHitLocation() const;
+
+protected:
+	UFUNCTION(BlueprintCallable)
+	void SetCrosshairPositionOnCanvas(const FVector2D& position);
+
+	TOptional <FVector2D> m_crosshairCanvasPosition;
 };

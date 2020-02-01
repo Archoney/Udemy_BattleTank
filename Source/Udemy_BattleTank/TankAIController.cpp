@@ -9,8 +9,6 @@
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	GetControlledTank();
-	GetPlayerTank();
 }
 
 ATankPawn* ATankAIController::GetControlledTank() const
