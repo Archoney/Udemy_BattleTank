@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -8,9 +6,6 @@
 
 class ATankPawn;
 
-/**
- * 
- */
 UCLASS()
 class UDEMY_BATTLETANK_API ATankPlayerController : public APlayerController
 {
@@ -24,11 +19,11 @@ public:
 	void AimAtCrosshair();
 	TOptional<FVector> GetSightRayHitLocation() const;
 	TOptional<FVector> GetLookDirection() const;
-	TOptional<FVector> GetLookVectorHitLocation(const FVector& lookDirection) const;
+	TOptional<FVector> GetLookVectorHitLocation(const FVector& LookDirection) const;
 
 protected:
 	UFUNCTION(BlueprintCallable)
-	void SetCrosshairPositionOnCanvas(const FVector2D& position);
+	void SetCrosshairPositionOnCanvas(const FVector2D& Position);
 
-	TOptional<FVector2D> m_crosshairCanvasPosition;
+	TOptional<FVector2D> CrosshairCanvasPosition;
 };

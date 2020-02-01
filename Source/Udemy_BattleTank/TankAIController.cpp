@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "TankAIController.h"
 #include "TankPawn.h"
 #include "TankPlayerController.h"
@@ -19,14 +16,14 @@ void ATankAIController::Tick(float DeltaSeconds)
 
 ATankPawn* ATankAIController::GetControlledTank() const
 {
-	auto controlledTank = Cast<ATankPawn>(GetPawn());
-	check(controlledTank && "AIController do not possess any tank!");
-	return controlledTank;
+	auto ControlledTank = Cast<ATankPawn>(GetPawn());
+	check(ControlledTank && "AIController do not possess any tank!");
+	return ControlledTank;
 }
 
 ATankPawn* ATankAIController::GetPlayerTank() const
 {
-	auto playerControlledTank = Cast<ATankPlayerController>(GetWorld()->GetFirstPlayerController())->GetControlledTank();
-	check(playerControlledTank && "Player Controller not found on scene or do not possess a tank!");
-	return playerControlledTank;
+	auto PlayerControlledTank = Cast<ATankPlayerController>(GetWorld()->GetFirstPlayerController())->GetControlledTank();
+	check(PlayerControlledTank && "Player Controller not found on scene or do not possess a tank!");
+	return PlayerControlledTank;
 }

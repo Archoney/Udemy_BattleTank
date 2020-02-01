@@ -1,13 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "TankPlayerController.h"
 #include "TankPawn.h"
 #include "Engine/World.h"
 #include "Camera/PlayerCameraManager.h"
-
-// DEBUG
-// #include "DrawDebugHelpers.h"
 
 void ATankPlayerController::BeginPlay()
 {
@@ -22,73 +16,69 @@ void ATankPlayerController::Tick(float DeltaSeconds)
 
 ATankPawn* ATankPlayerController::GetControlledTank() const
 {
-	auto controlledTank = Cast<ATankPawn>(GetPawn());
-	check(controlledTank && "PlayerController do not possess any tank!");
-	return controlledTank;
+	auto ControlledTank = Cast<ATankPawn>(GetPawn());
+	check(ControlledTank && "PlayerController do not possess any tank!");
+	return ControlledTank;
 }
 
 void ATankPlayerController::AimAtCrosshair()
 {
-	auto hitLocation = GetSightRayHitLocation();
-	if (hitLocation)
+	auto HitLocation = GetSightRayHitLocation();
+	if (HitLocation)
 	{
-		GetControlledTank()->AimAt(hitLocation.GetValue());
+		GetControlledTank()->AimAt(HitLocation.GetValue());
 	}
 }
 
 TOptional<FVector> ATankPlayerController::GetSightRayHitLocation() const
 {
-	auto lookDirection = GetLookDirection();
-	if (lookDirection)
+	auto LookDirection = GetLookDirection();
+	if (LookDirection)
 	{
-		return GetLookVectorHitLocation(lookDirection.GetValue());
+		return GetLookVectorHitLocation(LookDirection.GetValue());
 	}
 	return TOptional<FVector>();
 }
 
 TOptional<FVector> ATankPlayerController::GetLookDirection() const
 {
-	if (m_crosshairCanvasPosition)
+	if (CrosshairCanvasPosition)
 	{
-		int32 viewportSizeX, viewportSizeY;
-		GetViewportSize(viewportSizeX, viewportSizeY);
+		int32 ViewportSizeX, ViewportSizeY;
+		GetViewportSize(ViewportSizeX, ViewportSizeY);
 
 		auto crosshairViewportPosition = FVector2D{
-			viewportSizeX * m_crosshairCanvasPosition.GetValue().X,
-			viewportSizeY * m_crosshairCanvasPosition.GetValue().Y };
+			ViewportSizeX * CrosshairCanvasPosition.GetValue().X,
+			ViewportSizeY * CrosshairCanvasPosition.GetValue().Y };
 
-		FVector worldLocation, worldDirection;
+		FVector WorldLocation, WorldDirection;
 		DeprojectScreenPositionToWorld(
 			crosshairViewportPosition.X,
 			crosshairViewportPosition.Y,
-			worldLocation,
-			worldDirection
+			WorldLocation,
+			WorldDirection
 		);
 
-		return worldDirection;
+		return WorldDirection;
 	}
 	return TOptional<FVector>();
 }
 
-TOptional<FVector> ATankPlayerController::GetLookVectorHitLocation(const FVector& lookDirection) const
+TOptional<FVector> ATankPlayerController::GetLookVectorHitLocation(const FVector& LookDirection) const
 {
-	FHitResult hitResult;
-	auto lineTraceStart = PlayerCameraManager->GetCameraLocation();
-	auto lineTraceLength = 1000000.0f;
-	auto lineTraceEnd = lineTraceStart + lookDirection * lineTraceLength;
+	FHitResult HitResult;
+	auto LineTraceStart = PlayerCameraManager->GetCameraLocation();
+	auto LineTraceLength = 1000000.0f;
+	auto LineTraceEnd = LineTraceStart + LookDirection * LineTraceLength;
 
-	if (GetWorld()->LineTraceSingleByChannel(hitResult, lineTraceStart, lineTraceEnd, ECC_Visibility))
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, LineTraceStart, LineTraceEnd, ECC_Visibility))
 	{
-		// DEBUG
-		// UE_LOG(LogTemp, Warning, TEXT("Object hit: %s"), *hitResult.GetActor()->GetFullName());
-		// DrawDebugLine(GetWorld(), lineTraceStart, lineTraceEnd, FColor(1.0f, 0.0f, 0.0f, 1.0f), false, -1.0f, 0, 10.0f);
-		return hitResult.Location;
+		return HitResult.Location;
 	}
-
 	return TOptional<FVector>();
 }
 
-void ATankPlayerController::SetCrosshairPositionOnCanvas(const FVector2D& position)
+void ATankPlayerController::SetCrosshairPositionOnCanvas(const FVector2D& Position)
 {
-	m_crosshairCanvasPosition.Emplace(position);
+	CrosshairCanvasPosition.Emplace(Position);
 }

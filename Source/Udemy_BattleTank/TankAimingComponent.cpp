@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "TankAimingComponent.h"
 #include "Components/StaticMeshComponent.h"
 
@@ -9,41 +6,20 @@ UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
-
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
-	
-}
-
-
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
-void UTankAimingComponent::AimAt(const FVector& targetLocation)
+void UTankAimingComponent::AimAt(const FVector& TargetLocation)
 {
 	UE_LOG(LogTemp, Warning, TEXT("%s is aiming at: %s; from: %s"),
 		*GetOwner()->GetName(),
-		*targetLocation.ToString(),
-		*m_barrel->GetComponentLocation().ToString());
+		*TargetLocation.ToString(),
+		*Barrel->GetComponentLocation().ToString());
 }
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* barrel)
+void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* TankBarrel)
 {
-	check(barrel);
-	m_barrel = barrel;
+	check(TankBarrel);
+	Barrel = TankBarrel;
 }
 
