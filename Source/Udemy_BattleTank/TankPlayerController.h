@@ -22,11 +22,12 @@ public:
 
 	ATankPawn* GetControlledTank() const;
 	void AimAtCrosshair();
-	TOptional< FVector> GetSightRayHitLocation() const;
+	TOptional<FVector> GetSightRayHitLocation() const;
+	TOptional<FVector> GetLookDirection() const;
 
 protected:
 	UFUNCTION(BlueprintCallable)
 	void SetCrosshairPositionOnCanvas(const FVector2D& position);
 
-	TOptional <FVector2D> m_crosshairCanvasPosition;
+	TOptional<FVector2D> m_crosshairCanvasPosition;
 };

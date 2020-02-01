@@ -31,7 +31,17 @@ void ATankPlayerController::AimAtCrosshair()
 	}
 }
 
-TOptional< FVector> ATankPlayerController::GetSightRayHitLocation() const
+TOptional<FVector> ATankPlayerController::GetSightRayHitLocation() const
+{
+	auto lookDirection = GetLookDirection();
+	if (lookDirection)
+	{
+
+	}
+	return TOptional<FVector>();
+}
+
+TOptional<FVector> ATankPlayerController::GetLookDirection() const
 {
 	if (m_crosshairCanvasPosition)
 	{
@@ -42,7 +52,15 @@ TOptional< FVector> ATankPlayerController::GetSightRayHitLocation() const
 			viewportSizeX * m_crosshairCanvasPosition.GetValue().X,
 			viewportSizeX * m_crosshairCanvasPosition.GetValue().Y };
 
-		UE_LOG(LogTemp, Warning, TEXT("Crosshair viewport position: %s"), *crosshairViewportPosition.ToString())
+		FVector worldLocation, worldDirection;
+		DeprojectScreenPositionToWorld(
+			crosshairViewportPosition.X,
+			crosshairViewportPosition.Y,
+			worldLocation,
+			worldDirection
+		);
+
+		return worldDirection;
 	}
 	return TOptional<FVector>();
 }
