@@ -19,14 +19,14 @@ void ATankAIController::Tick(float DeltaSeconds)
 
 ATankPawn* ATankAIController::GetControlledTank() const
 {
-	static auto controlledTank = Cast<ATankPawn>(GetPawn());
+	auto controlledTank = Cast<ATankPawn>(GetPawn());
 	check(controlledTank && "AIController do not possess any tank!");
 	return controlledTank;
 }
 
 ATankPawn* ATankAIController::GetPlayerTank() const
 {
-	static auto playerControlledTank = Cast<ATankPlayerController>(GetWorld()->GetFirstPlayerController())->GetControlledTank();
+	auto playerControlledTank = Cast<ATankPlayerController>(GetWorld()->GetFirstPlayerController())->GetControlledTank();
 	check(playerControlledTank && "Player Controller not found on scene or do not possess a tank!");
 	return playerControlledTank;
 }

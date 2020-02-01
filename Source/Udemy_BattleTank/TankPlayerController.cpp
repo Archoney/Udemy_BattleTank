@@ -22,7 +22,7 @@ void ATankPlayerController::Tick(float DeltaSeconds)
 
 ATankPawn* ATankPlayerController::GetControlledTank() const
 {
-	static auto controlledTank = Cast<ATankPawn>(GetPawn());
+	auto controlledTank = Cast<ATankPawn>(GetPawn());
 	check(controlledTank && "PlayerController do not possess any tank!");
 	return controlledTank;
 }
