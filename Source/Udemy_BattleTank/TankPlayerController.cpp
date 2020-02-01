@@ -7,7 +7,8 @@
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("Custom player controller begin play"));
+
+	check(GetTankPawn() && "PlayerController do not possess anything!");
 }
 
 ATankPawn* ATankPlayerController::GetTankPawn() const
