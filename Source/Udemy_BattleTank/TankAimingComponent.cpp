@@ -2,6 +2,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -18,7 +19,7 @@ void UTankAimingComponent::AimAt(const FVector& TargetLocation, float LaunchSpee
 	auto StartLocation = Barrel->GetSocketLocation(FName("BarrelEnd"));
 	auto VelocityFound = UGameplayStatics::SuggestProjectileVelocity(
 		this, TossVelocity, StartLocation, TargetLocation, LaunchSpeed, false, 0.f, 0, ESuggestProjVelocityTraceOption::DoNotTrace
-		//DEBUG ,FCollisionResponseParams::DefaultResponseParam,TArray<AActor*>(),true
+		 // DEBUG ,FCollisionResponseParams::DefaultResponseParam,TArray<AActor*>(),true
 		);
 
 	if (VelocityFound)
@@ -34,10 +35,19 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrel* TankBarrel)
 	Barrel = TankBarrel;
 }
 
+void UTankAimingComponent::SetTurretReference(UTankTurret* TankTurret)
+{
+	check(TankTurret);
+	Turret = TankTurret;
+}
+
 void UTankAimingComponent::MoveBarrelTowards(const FVector& Direction)
 {
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimRotator = Direction.Rotation();
-	Barrel->Elevate(5.0f);
+	auto DeltaRotator = AimRotator - BarrelRotator;
+
+	Barrel->Elevate(DeltaRotator.Pitch);
+	Turret->Turn(DeltaRotator.Yaw);
 }
 

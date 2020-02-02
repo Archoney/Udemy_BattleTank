@@ -19,3 +19,8 @@ void ATankPawn::SetBarrelReference(UTankBarrel* TankBarrel)
 	AimingComponent->SetBarrelReference(TankBarrel);
 }
 
+void ATankPawn::SetTurretReference(UTankTurret* TankTurret)
+{
+	AimingComponent->SetTurretReference(TankTurret);
+}
+
