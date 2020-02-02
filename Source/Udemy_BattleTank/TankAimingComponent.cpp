@@ -1,5 +1,7 @@
 #include "TankAimingComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "TankBarrel.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -9,17 +11,33 @@ UTankAimingComponent::UTankAimingComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UTankAimingComponent::AimAt(const FVector& TargetLocation)
+void UTankAimingComponent::AimAt(const FVector& TargetLocation, float LaunchSpeed)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s is aiming at: %s; from: %s"),
-		*GetOwner()->GetName(),
-		*TargetLocation.ToString(),
-		*Barrel->GetComponentLocation().ToString());
+
+	FVector TossVelocity;
+	auto StartLocation = Barrel->GetSocketLocation(FName("BarrelEnd"));
+	auto VelocityFound = UGameplayStatics::SuggestProjectileVelocity(
+		this, TossVelocity, StartLocation, TargetLocation, LaunchSpeed, false, 0.f, 0, ESuggestProjVelocityTraceOption::DoNotTrace
+		//DEBUG ,FCollisionResponseParams::DefaultResponseParam,TArray<AActor*>(),true
+		);
+
+	if (VelocityFound)
+	{
+		auto AimDirection = TossVelocity.GetSafeNormal();
+		MoveBarrelTowards(AimDirection);
+	}
 }
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* TankBarrel)
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* TankBarrel)
 {
 	check(TankBarrel);
 	Barrel = TankBarrel;
+}
+
+void UTankAimingComponent::MoveBarrelTowards(const FVector& Direction)
+{
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	auto AimRotator = Direction.Rotation();
+	Barrel->Elevate(5.0f);
 }
 

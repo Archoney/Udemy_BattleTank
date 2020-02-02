@@ -11,10 +11,10 @@ ATankPawn::ATankPawn()
 
 void ATankPawn::AimAt(const FVector& TargetLocation)
 {
-	AimingComponent->AimAt(TargetLocation);
+	AimingComponent->AimAt(TargetLocation, LaunchSpeed);
 }
 
-void ATankPawn::SetBarrelReference(UStaticMeshComponent* TankBarrel)
+void ATankPawn::SetBarrelReference(UTankBarrel* TankBarrel)
 {
 	AimingComponent->SetBarrelReference(TankBarrel);
 }
