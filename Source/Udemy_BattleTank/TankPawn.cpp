@@ -12,6 +12,12 @@ ATankPawn::ATankPawn()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
+void ATankPawn::BeginPlay()
+{
+	Super::BeginPlay();
+	LastFireTime = FPlatformTime::Seconds();
+}
+
 void ATankPawn::AimAt(const FVector& TargetLocation)
 {
 	AimingComponent->AimAt(TargetLocation, LaunchSpeed);

@@ -17,6 +17,8 @@ class UDEMY_BATTLETANK_API ATankPawn : public APawn
 public:
 	ATankPawn();
 
+	void BeginPlay() override;
+
 	void AimAt(const FVector& TargetLocation);
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
