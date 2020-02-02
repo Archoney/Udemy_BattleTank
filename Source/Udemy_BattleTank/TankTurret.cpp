@@ -6,6 +6,4 @@ void UTankTurret::Turn(float RelativeSpeed)
 	auto TurningChange = ClampedRelaticeSpeed * MaxDegreesPerSecond * GetWorld()->DeltaTimeSeconds;
 	auto Yaw = RelativeRotation.Yaw + TurningChange;
 	SetRelativeRotation(FRotator(0.0f, Yaw, 0.0f));
-
-	//UE_LOG(LogTemp, Warning, TEXT("Aiming at: %s"), *AimRotator.ToString());
 }

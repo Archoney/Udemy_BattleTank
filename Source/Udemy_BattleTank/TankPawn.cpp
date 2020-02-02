@@ -24,3 +24,8 @@ void ATankPawn::SetTurretReference(UTankTurret* TankTurret)
 	AimingComponent->SetTurretReference(TankTurret);
 }
 
+void ATankPawn::Fire()
+{
+	UE_LOG(LogTemp, Warning, TEXT("%s Fires!"), *GetName());
+}
+

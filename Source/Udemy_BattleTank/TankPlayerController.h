@@ -22,7 +22,7 @@ public:
 	TOptional<FVector> GetLookVectorHitLocation(const FVector& LookDirection) const;
 
 protected:
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetCrosshairPositionOnCanvas(const FVector2D& Position);
 
 	TOptional<FVector2D> CrosshairCanvasPosition;
