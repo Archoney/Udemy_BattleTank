@@ -7,6 +7,7 @@
 class UTankAimingComponent;
 class UTankBarrel;
 class UTankTurret;
+class AProjectile;
 
 UCLASS()
 class UDEMY_BATTLETANK_API ATankPawn : public APawn
@@ -24,6 +25,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 		void SetTurretReference(UTankTurret* TankTurret);
 
+	UPROPERTY(EditAnywhere, Category = Setup)
+		TSubclassOf<AProjectile> ProjectileBlueprint;
+
 	UFUNCTION(BlueprintCallable, Category = Firing)
 		void Fire();
 
@@ -32,4 +36,7 @@ public:
 
 protected:
 	UTankAimingComponent* AimingComponent{ nullptr };
+
+private:
+	UTankBarrel* Barrel{ nullptr };
 };

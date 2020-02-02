@@ -1,5 +1,8 @@
 #include "TankPawn.h"
 #include "TankAimingComponent.h"
+#include "Engine/World.h"
+#include "TankBarrel.h"
+#include "Projectile.h"
 
 // Sets default values
 ATankPawn::ATankPawn() 
@@ -16,6 +19,7 @@ void ATankPawn::AimAt(const FVector& TargetLocation)
 
 void ATankPawn::SetBarrelReference(UTankBarrel* TankBarrel)
 {
+	Barrel = TankBarrel;
 	AimingComponent->SetBarrelReference(TankBarrel);
 }
 
@@ -27,5 +31,10 @@ void ATankPawn::SetTurretReference(UTankTurret* TankTurret)
 void ATankPawn::Fire()
 {
 	UE_LOG(LogTemp, Warning, TEXT("%s Fires!"), *GetName());
+
+	GetWorld()->SpawnActor< AProjectile >(
+		ProjectileBlueprint,
+		Barrel->GetSocketLocation(FName("Barrel")),
+		Barrel->GetSocketRotation(FName("Barrel")));
 }
 
