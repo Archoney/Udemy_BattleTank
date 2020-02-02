@@ -30,11 +30,11 @@ void ATankPawn::SetTurretReference(UTankTurret* TankTurret)
 
 void ATankPawn::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s Fires!"), *GetName());
-
-	GetWorld()->SpawnActor< AProjectile >(
+	auto Projectile = GetWorld()->SpawnActor< AProjectile >(
 		ProjectileBlueprint,
-		Barrel->GetSocketLocation(FName("Barrel")),
-		Barrel->GetSocketRotation(FName("Barrel")));
+		Barrel->GetSocketLocation(FName("BarrelEnd")),
+		Barrel->GetSocketRotation(FName("BarrelEnd")));
+
+	Projectile->Launch(LaunchSpeed);
 }
 
