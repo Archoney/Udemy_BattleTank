@@ -12,10 +12,10 @@ class UDEMY_BATTLETANK_API UTankBarrel : public UStaticMeshComponent
 public:
 	void Elevate(float RelativeSpeed);
 	
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		float MaxDegreesPerSecond = 10.0f;
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		float ElevationMaxDegrees = 30.0f;
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		float ElevationMinDegrees = -1.0f;
 };

@@ -30,11 +30,17 @@ void ATankPawn::SetTurretReference(UTankTurret* TankTurret)
 
 void ATankPawn::Fire()
 {
-	auto Projectile = GetWorld()->SpawnActor< AProjectile >(
-		ProjectileBlueprint,
-		Barrel->GetSocketLocation(FName("BarrelEnd")),
-		Barrel->GetSocketRotation(FName("BarrelEnd")));
+	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
 
-	Projectile->Launch(LaunchSpeed);
+	if (isReloaded)
+	{
+		auto Projectile = GetWorld()->SpawnActor< AProjectile >(
+			ProjectileBlueprint,
+			Barrel->GetSocketLocation(FName("BarrelEnd")),
+			Barrel->GetSocketRotation(FName("BarrelEnd")));
+
+		Projectile->Launch(LaunchSpeed);
+		LastFireTime = FPlatformTime::Seconds();
+	}
 }
 

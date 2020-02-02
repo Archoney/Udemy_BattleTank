@@ -18,6 +18,7 @@ public:
 	void BeginPlay() override;
 	void Tick(float DeltaSeconds) override;
 
-	ATankPawn* GetControlledTank() const;
-	ATankPawn* GetPlayerTank() const;
+private:
+	ATankPawn* ControlledTank;
+	ATankPawn* PlayerControlledTank;
 };

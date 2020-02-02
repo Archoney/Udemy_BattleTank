@@ -6,24 +6,20 @@
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
+	ControlledTank = Cast<ATankPawn>(GetPawn());
+	check(ControlledTank && "AIController do not possess any tank!");
 }
 
 void ATankAIController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	GetControlledTank()->AimAt(GetPlayerTank()->GetActorLocation());
-}
 
-ATankPawn* ATankAIController::GetControlledTank() const
-{
-	auto ControlledTank = Cast<ATankPawn>(GetPawn());
-	check(ControlledTank && "AIController do not possess any tank!");
-	return ControlledTank;
-}
+	if (!PlayerControlledTank)
+	{
+		PlayerControlledTank = Cast<ATankPlayerController>(GetWorld()->GetFirstPlayerController())->GetControlledTank();
+		check(PlayerControlledTank && "Player Controller not found on scene or do not possess a tank!");
+	}
 
-ATankPawn* ATankAIController::GetPlayerTank() const
-{
-	auto PlayerControlledTank = Cast<ATankPlayerController>(GetWorld()->GetFirstPlayerController())->GetControlledTank();
-	check(PlayerControlledTank && "Player Controller not found on scene or do not possess a tank!");
-	return PlayerControlledTank;
+	ControlledTank->AimAt(PlayerControlledTank->GetActorLocation());
+	ControlledTank->Fire();
 }
