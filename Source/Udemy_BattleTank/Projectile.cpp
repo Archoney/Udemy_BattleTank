@@ -28,6 +28,5 @@ void AProjectile::Launch(float Speed)
 {
 	MovementComponent->SetVelocityInLocalSpace(FVector::ForwardVector * Speed);
 	MovementComponent->Activate();
-	UE_LOG(LogTemp, Warning, TEXT("%s Fires!"), *GetName());
 }
 
