@@ -21,4 +21,7 @@ public:
 private:
 	ATankPawn* ControlledTank;
 	ATankPawn* PlayerControlledTank;
+
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+		float AcceptanceRadius = 3000.0f;
 };
