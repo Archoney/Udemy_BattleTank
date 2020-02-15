@@ -28,5 +28,4 @@ void UTankNavMovementComponent::RequestDirectMove(const FVector& MoveVelocity, b
 
 	IntendMoveForward(FVector::DotProduct(TankForward, AIForwardIntention));
 	IntendRotateRight(FVector::CrossProduct(TankForward, AIForwardIntention).Z);
-	//UE_LOG(LogTemp, Warning, TEXT("%s Throw: %f"), *GetName(), FVector::CrossProduct(TankForward, AIForwardIntention).Z);
 }

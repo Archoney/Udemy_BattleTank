@@ -6,9 +6,6 @@
 
 class ATankPawn;
 
-/**
- * 
- */
 UCLASS()
 class UDEMY_BATTLETANK_API ATankAIController : public AAIController
 {
@@ -22,6 +19,6 @@ private:
 	ATankPawn* ControlledTank;
 	ATankPawn* PlayerControlledTank;
 
-	UPROPERTY(EditDefaultsOnly, Category = Setup)
-		float AcceptanceRadius = 300.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+		float AcceptanceRadius = 1000.0f;
 };

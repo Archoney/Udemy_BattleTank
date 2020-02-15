@@ -12,13 +12,13 @@ class UDEMY_BATTLETANK_API UTankNavMovementComponent : public UNavMovementCompon
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 		void Init(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet);
 
-	UFUNCTION(BlueprintCallable, Category = Input)
+	UFUNCTION(BlueprintCallable, Category = "Input")
 		void IntendMoveForward(float Throw);
 
-	UFUNCTION(BlueprintCallable, Category = Input)
+	UFUNCTION(BlueprintCallable, Category = "Input")
 		void IntendRotateRight(float Throw);
 
 	void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;

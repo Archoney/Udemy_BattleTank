@@ -16,11 +16,11 @@ public:
 	UTankAimingComponent();
 
 public:	
-	UFUNCTION(BlueprintCallable, Category = Firing)
+	UFUNCTION(BlueprintCallable, Category = "Firing")
 		void AimAt(const FVector& TargetLocation, float LaunchSpeed);
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 		void SetBarrelReference(UTankBarrel* TankBarrel);
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 		void SetTurretReference(UTankTurret* TankTurret);
 
 private:

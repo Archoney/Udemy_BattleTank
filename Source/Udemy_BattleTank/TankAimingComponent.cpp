@@ -18,9 +18,7 @@ void UTankAimingComponent::AimAt(const FVector& TargetLocation, float LaunchSpee
 	FVector TossVelocity;
 	auto StartLocation = Barrel->GetSocketLocation(FName("BarrelEnd"));
 	auto VelocityFound = UGameplayStatics::SuggestProjectileVelocity(
-		this, TossVelocity, StartLocation, TargetLocation, LaunchSpeed, false, 0.f, 0, ESuggestProjVelocityTraceOption::DoNotTrace
-		 // DEBUG ,FCollisionResponseParams::DefaultResponseParam,TArray<AActor*>(),true
-		);
+		this, TossVelocity, StartLocation, TargetLocation, LaunchSpeed, false, 0.f, 0, ESuggestProjVelocityTraceOption::DoNotTrace);
 
 	if (VelocityFound)
 	{
