@@ -5,6 +5,7 @@
 #include "TankPawn.generated.h"
 
 class UTankAimingComponent;
+class UTankNavMovementComponent;
 class UTankBarrel;
 class UTankTurret;
 class AProjectile;
@@ -41,6 +42,8 @@ public:
 
 protected:
 	UTankAimingComponent* AimingComponent{ nullptr };
+	UPROPERTY(BlueprintReadOnly)
+		UTankNavMovementComponent* MovementComponent{ nullptr };
 
 private:
 	UTankBarrel* Barrel{ nullptr };
