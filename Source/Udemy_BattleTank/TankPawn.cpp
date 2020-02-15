@@ -1,14 +1,11 @@
 #include "TankPawn.h"
 #include "TankAimingComponent.h"
-#include "TankNavMovementComponent.h"
 #include "Engine/World.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
 
 // Sets default values
-ATankPawn::ATankPawn():
-	AimingComponent{ CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component")) },
-	MovementComponent{ CreateDefaultSubobject<UTankNavMovementComponent>(FName("Movement Component")) }
+ATankPawn::ATankPawn()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -25,15 +22,16 @@ void ATankPawn::AimAt(const FVector& TargetLocation)
 	AimingComponent->AimAt(TargetLocation, LaunchSpeed);
 }
 
-void ATankPawn::SetBarrelReference(UTankBarrel* TankBarrel)
+void ATankPawn::InitAimingComponent(UTankAimingComponent* AimingComponentToSet)
 {
-	Barrel = TankBarrel;
-	AimingComponent->SetBarrelReference(TankBarrel);
+	check(AimingComponentToSet && "Aiming component pointer is null!");
+	AimingComponent = AimingComponentToSet;
 }
 
-void ATankPawn::SetTurretReference(UTankTurret* TankTurret)
+void ATankPawn::InitBarrel(UTankBarrel* BarrelToSet)
 {
-	AimingComponent->SetTurretReference(TankTurret);
+	check(BarrelToSet && "Barrel pointer is null!");
+	Barrel = BarrelToSet;
 }
 
 void ATankPawn::Fire()

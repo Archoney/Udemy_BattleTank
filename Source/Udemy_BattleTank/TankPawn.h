@@ -5,7 +5,6 @@
 #include "TankPawn.generated.h"
 
 class UTankAimingComponent;
-class UTankNavMovementComponent;
 class UTankBarrel;
 class UTankTurret;
 class AProjectile;
@@ -22,14 +21,14 @@ public:
 
 	void AimAt(const FVector& TargetLocation);
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
-		void SetBarrelReference(UTankBarrel* TankBarrel);
-
-	UFUNCTION(BlueprintCallable, Category = Setup)
-		void SetTurretReference(UTankTurret* TankTurret);
-
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+		void InitAimingComponent(UTankAimingComponent* AimingComponentToSet);
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+		void InitBarrel(UTankBarrel* BarrelToSet);
 
 	UFUNCTION(BlueprintCallable, Category = Firing)
 		void Fire();
@@ -40,12 +39,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float ReloadTimeInSeconds = 3.0f;
 
-protected:
-	UTankAimingComponent* AimingComponent{ nullptr };
-	UPROPERTY(BlueprintReadOnly)
-		UTankNavMovementComponent* MovementComponent{ nullptr };
-
 private:
+	UTankAimingComponent* AimingComponent{nullptr};
 	UTankBarrel* Barrel{ nullptr };
 	double LastFireTime{ 0.0 };
 };

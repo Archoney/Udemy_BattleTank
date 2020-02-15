@@ -16,9 +16,12 @@ public:
 	UTankAimingComponent();
 
 public:	
-	void AimAt(const FVector& TargetLocation, float LaunchSpeed);
-	void SetBarrelReference(UTankBarrel* TankBarrel);
-	void SetTurretReference(UTankTurret* TankTurret);
+	UFUNCTION(BlueprintCallable, Category = Firing)
+		void AimAt(const FVector& TargetLocation, float LaunchSpeed);
+	UFUNCTION(BlueprintCallable, Category = Setup)
+		void SetBarrelReference(UTankBarrel* TankBarrel);
+	UFUNCTION(BlueprintCallable, Category = Setup)
+		void SetTurretReference(UTankTurret* TankTurret);
 
 private:
 	UTankBarrel* Barrel{ nullptr };
