@@ -11,11 +11,6 @@ void UTankNavMovementComponent::Init(UTankTrack* LeftTrackToSet, UTankTrack* Rig
 
 void UTankNavMovementComponent::IntendMoveForward(float Throw)
 {
-	if (Throw != 0)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%s intend move forward with throw: %f"), *GetName(), Throw);
-	}
-
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
 }
@@ -32,4 +27,6 @@ void UTankNavMovementComponent::RequestDirectMove(const FVector& MoveVelocity, b
 	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
 
 	IntendMoveForward(FVector::DotProduct(TankForward, AIForwardIntention));
+	IntendRotateRight(FVector::CrossProduct(TankForward, AIForwardIntention).Z);
+	//UE_LOG(LogTemp, Warning, TEXT("%s Throw: %f"), *GetName(), FVector::CrossProduct(TankForward, AIForwardIntention).Z);
 }

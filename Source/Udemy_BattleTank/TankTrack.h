@@ -14,5 +14,5 @@ public:
 		void SetThrottle(float Throttle);
 
 	UPROPERTY(EditDefaultsOnly)
-		float MaxDrivingForce = 30000000.0f;
+		float MaxDrivingForce = 50000000.0f;
 };
