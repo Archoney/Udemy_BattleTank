@@ -1,22 +1,20 @@
 #include "TankNavMovementComponent.h"
 #include "TankTrack.h"
 
-void UTankNavMovementComponent::Init(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
-{
-	check(LeftTrackToSet && "Left track pointer not set!");
-	LeftTrack = LeftTrackToSet;
-	check(RightTrackToSet && "Right track pointer not set!");
-	RightTrack = RightTrackToSet;
-}
-
 void UTankNavMovementComponent::IntendMoveForward(float Throw)
 {
+	check(LeftTrack && "UTankNavMovementComponent - Left track is null!");
+	check(RightTrack && "UTankNavMovementComponent - Right track is null!");
+
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
 }
 
 void UTankNavMovementComponent::IntendRotateRight(float Throw)
 {
+	check(LeftTrack && "UTankNavMovementComponent - Left track is null!");
+	check(RightTrack && "UTankNavMovementComponent - Right track is null!");
+
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(-Throw);
 }
@@ -28,4 +26,13 @@ void UTankNavMovementComponent::RequestDirectMove(const FVector& MoveVelocity, b
 
 	IntendMoveForward(FVector::DotProduct(TankForward, AIForwardIntention));
 	IntendRotateRight(FVector::CrossProduct(TankForward, AIForwardIntention).Z);
+}
+
+void UTankNavMovementComponent::InitTracks(UTankTrack* TankLeftTrack, UTankTrack* TankRightTrack)
+{
+	check(TankLeftTrack && "UTankNavMovementComponent - Left track is null!");
+	check(TankRightTrack && "UTankNavMovementComponent - Right track is null!");
+
+	LeftTrack = TankLeftTrack;
+	RightTrack = TankRightTrack;
 }

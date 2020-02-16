@@ -10,6 +10,7 @@ AProjectile::AProjectile():
 
 void AProjectile::Launch(float Speed)
 {
+	check(MovementComponent && "AProjectile - Movement Component is null!")
 	MovementComponent->SetVelocityInLocalSpace(FVector::ForwardVector * Speed);
 	MovementComponent->Activate();
 }

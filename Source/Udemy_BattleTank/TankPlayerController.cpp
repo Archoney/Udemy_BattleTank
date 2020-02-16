@@ -14,13 +14,6 @@ void ATankPlayerController::Tick(float DeltaSeconds)
 	AimAtCrosshair();
 }
 
-ATankPawn* ATankPlayerController::GetControlledTank() const
-{
-	auto ControlledTank = Cast<ATankPawn>(GetPawn());
-	check(ControlledTank && "PlayerController do not possess any tank!");
-	return ControlledTank;
-}
-
 void ATankPlayerController::AimAtCrosshair()
 {
 	auto HitLocation = GetSightRayHitLocation();
@@ -28,6 +21,18 @@ void ATankPlayerController::AimAtCrosshair()
 	{
 		GetControlledTank()->AimAt(HitLocation.GetValue());
 	}
+}
+
+ATankPawn* ATankPlayerController::GetControlledTank() const
+{
+	auto ControlledTank = Cast<ATankPawn>(GetPawn());
+	check(ControlledTank && "ATankPlayerController - ControlledTank is null!");
+	return ControlledTank;
+}
+
+void ATankPlayerController::SetCrosshairPositionOnCanvas(const FVector2D& Position)
+{
+	CrosshairCanvasPosition.Emplace(Position);
 }
 
 TOptional<FVector> ATankPlayerController::GetSightRayHitLocation() const
@@ -76,9 +81,4 @@ TOptional<FVector> ATankPlayerController::GetLookVectorHitLocation(const FVector
 		return HitResult.Location;
 	}
 	return TOptional<FVector>();
-}
-
-void ATankPlayerController::SetCrosshairPositionOnCanvas(const FVector2D& Position)
-{
-	CrosshairCanvasPosition.Emplace(Position);
 }

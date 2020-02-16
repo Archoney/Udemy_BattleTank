@@ -23,18 +23,16 @@ class UDEMY_BATTLETANK_API UTankAimingComponent : public UActorComponent
 public:	
 	UTankAimingComponent();
 
-public:	
-	UFUNCTION(BlueprintCallable, Category = "Firing")
-		void AimAt(const FVector& TargetLocation, float LaunchSpeed);
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-		void SetBarrelReference(UTankBarrel* TankBarrel);
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-		void SetTurretReference(UTankTurret* TankTurret);
+	void InitBarrel(UTankBarrel* TankBarrel);
+	void InitTurret(UTankTurret* TankTurret);
+
+	void AimAt(const FVector& TargetLocation, float LaunchSpeed);
+
+	UTankBarrel* GetBarrel() const;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Setup")
 	FiringState FiringState{ FiringState::Reloading };
-
 
 private:
 	void MoveBarrelTowards(const FVector& Direction);

@@ -7,7 +7,7 @@ void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 	ControlledTank = Cast<ATankPawn>(GetPawn());
-	check(ControlledTank && "AIController do not possess any tank!");
+	check(ControlledTank && "ATankAIController - ControlledTank is null!");
 }
 
 void ATankAIController::Tick(float DeltaSeconds)
@@ -17,11 +17,13 @@ void ATankAIController::Tick(float DeltaSeconds)
 	if (!PlayerControlledTank)
 	{
 		PlayerControlledTank = Cast<ATankPlayerController>(GetWorld()->GetFirstPlayerController())->GetControlledTank();
-		check(PlayerControlledTank && "Player Controller not found on scene or do not possess a tank!");
+		check(PlayerControlledTank && "ATankAIController - PlayerControlledTank is null!");
 	}
 
+	// AI firing
 	ControlledTank->AimAt(PlayerControlledTank->GetActorLocation());
 	ControlledTank->Fire();
 
+	// AI moving
 	MoveToActor(PlayerControlledTank, AcceptanceRadius);
 }

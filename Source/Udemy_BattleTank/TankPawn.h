@@ -5,8 +5,10 @@
 #include "TankPawn.generated.h"
 
 class UTankAimingComponent;
+class UTankNavMovementComponent;
 class UTankBarrel;
 class UTankTurret;
+class UTankTrack;
 class AProjectile;
 
 UCLASS()
@@ -21,29 +23,33 @@ public:
 
 	void AimAt(const FVector& TargetLocation);
 
-	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-		TSubclassOf<AProjectile> ProjectileBlueprint;
-
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-		void InitAimingComponent(UTankAimingComponent* AimingComponentToSet);
-
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-		UTankAimingComponent* GetAimingComponent() const;
-
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-		void InitBarrel(UTankBarrel* BarrelToSet);
-
 	UFUNCTION(BlueprintCallable, Category = "Firing")
-		void Fire();
+	void Fire();
+
+protected:
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void InitAimingComponent(UTankAimingComponent* TankAimingComponent,
+							 UTankBarrel* TankBarrel, 
+							 UTankTurret* TankTurret);
+
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void InitMovementComponent(UTankNavMovementComponent* TankMovementComponent,
+							   UTankTrack* TankLeftTrack, 
+							   UTankTrack* TankRightTrack);
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<AProjectile> ProjectileBlueprint;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-		float LaunchSpeed = 10000.0f;
+	float LaunchSpeed = 10000.0f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-		float ReloadTimeInSeconds = 3.0f;
+	float ReloadTimeInSeconds = 3.0f;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Setup")
+	UTankAimingComponent* AimingComponent{ nullptr };
 
 private:
-	UTankAimingComponent* AimingComponent{nullptr};
-	UTankBarrel* Barrel{ nullptr };
+	UTankNavMovementComponent* MovementComponent{ nullptr };
 	double LastFireTime{ 0.0 };
 };

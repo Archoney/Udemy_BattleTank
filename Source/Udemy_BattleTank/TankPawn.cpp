@@ -1,13 +1,12 @@
 #include "TankPawn.h"
 #include "TankAimingComponent.h"
+#include "TankNavMovementComponent.h"
 #include "Engine/World.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
 
-// Sets default values
 ATankPawn::ATankPawn()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 }
 
@@ -19,39 +18,47 @@ void ATankPawn::BeginPlay()
 
 void ATankPawn::AimAt(const FVector& TargetLocation)
 {
+	check(AimingComponent && "ATankPawn - AimingComponent pointer is null!");
 	AimingComponent->AimAt(TargetLocation, LaunchSpeed);
-}
-
-void ATankPawn::InitAimingComponent(UTankAimingComponent* AimingComponentToSet)
-{
-	check(AimingComponentToSet && "Aiming component pointer is null!");
-	AimingComponent = AimingComponentToSet;
-}
-
-UTankAimingComponent* ATankPawn::GetAimingComponent() const
-{
-	return AimingComponent;
-}
-
-void ATankPawn::InitBarrel(UTankBarrel* BarrelToSet)
-{
-	check(BarrelToSet && "Barrel pointer is null!");
-	Barrel = BarrelToSet;
 }
 
 void ATankPawn::Fire()
 {
+	check(AimingComponent && "ATankPawn - AimingComponent pointer is null!");
 	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-
 	if (isReloaded)
 	{
 		auto Projectile = GetWorld()->SpawnActor< AProjectile >(
 			ProjectileBlueprint,
-			Barrel->GetSocketLocation(FName("BarrelEnd")),
-			Barrel->GetSocketRotation(FName("BarrelEnd")));
+			AimingComponent->GetBarrel()->GetSocketLocation(FName("BarrelEnd")),
+			AimingComponent->GetBarrel()->GetSocketRotation(FName("BarrelEnd")));
 
 		Projectile->Launch(LaunchSpeed);
 		LastFireTime = FPlatformTime::Seconds();
 	}
 }
 
+void ATankPawn::InitAimingComponent(UTankAimingComponent* TankAimingComponent, 
+									UTankBarrel* TankBarrel, 
+									UTankTurret* TankTurret)
+{
+	check(TankAimingComponent && "ATankPawn - Aiming component pointer is null!");
+	check(TankBarrel && "ATankPawn - Barrel pointer is null!");
+	check(TankTurret && "ATankPawn - Turret pointer is null!");
+
+	AimingComponent = TankAimingComponent;
+	AimingComponent->InitBarrel(TankBarrel);
+	AimingComponent->InitTurret(TankTurret);
+}
+
+void ATankPawn::InitMovementComponent(UTankNavMovementComponent* TankMovementComponent,
+									  UTankTrack* TankLeftTrack, 
+									  UTankTrack* TankRightTrack)
+{
+	check(TankMovementComponent && "ATankPawn - Movement component pointer is null!");
+	check(TankLeftTrack && "ATankPawn - Left Track pointer is null!");
+	check(TankRightTrack && "ATankPawn - Right Track pointer is null!");
+
+	MovementComponent = TankMovementComponent;
+	MovementComponent->InitTracks(TankLeftTrack, TankRightTrack);
+}
