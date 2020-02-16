@@ -60,8 +60,11 @@ void UTankAimingComponent::MoveBarrelTowards(const FVector& Direction)
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimRotator = Direction.Rotation();
 	auto DeltaRotator = AimRotator - BarrelRotator;
+	FRotator DeltaRotatorWinding;
+	FRotator DeltaRotatorRemainder;
+	DeltaRotator.GetWindingAndRemainder(DeltaRotatorWinding, DeltaRotatorRemainder);
 
-	Barrel->Elevate(DeltaRotator.Pitch);
-	Turret->Turn(DeltaRotator.Yaw);
+	Barrel->Elevate(DeltaRotatorRemainder.Pitch);
+	Turret->Turn(DeltaRotatorRemainder.Yaw);
 }
 
