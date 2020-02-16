@@ -14,12 +14,13 @@ class UDEMY_BATTLETANK_API ATankPlayerController : public APlayerController
 public:
 	void BeginPlay() override;
 	void Tick(float DeltaSeconds) override;
-
-	ATankPawn* GetControlledTank() const;
 	void AimAtCrosshair();
 	TOptional<FVector> GetSightRayHitLocation() const;
 	TOptional<FVector> GetLookDirection() const;
 	TOptional<FVector> GetLookVectorHitLocation(const FVector& LookDirection) const;
+
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	ATankPawn* GetControlledTank() const;
 
 protected:
 	UFUNCTION(BlueprintCallable, Category = "Setup")

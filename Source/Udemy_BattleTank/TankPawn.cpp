@@ -28,6 +28,11 @@ void ATankPawn::InitAimingComponent(UTankAimingComponent* AimingComponentToSet)
 	AimingComponent = AimingComponentToSet;
 }
 
+UTankAimingComponent* ATankPawn::GetAimingComponent() const
+{
+	return AimingComponent;
+}
+
 void ATankPawn::InitBarrel(UTankBarrel* BarrelToSet)
 {
 	check(BarrelToSet && "Barrel pointer is null!");

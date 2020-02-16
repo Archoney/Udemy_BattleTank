@@ -4,6 +4,14 @@
 #include "Components/ActorComponent.h"
 #include "TankAimingComponent.generated.h"
 
+UENUM()
+enum class FiringState : uint8
+{
+	Reloading,
+	Aiming,
+	Ready
+};
+
 class UTankBarrel;
 class UTankTurret;
 
@@ -23,8 +31,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 		void SetTurretReference(UTankTurret* TankTurret);
 
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "Setup")
+	FiringState FiringState{ FiringState::Reloading };
+
+
 private:
+	void MoveBarrelTowards(const FVector& Direction);
+
 	UTankBarrel* Barrel{ nullptr };
 	UTankTurret* Turret{ nullptr };
-	void MoveBarrelTowards(const FVector& Direction);
 };

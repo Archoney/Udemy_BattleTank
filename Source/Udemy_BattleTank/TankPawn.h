@@ -28,6 +28,9 @@ public:
 		void InitAimingComponent(UTankAimingComponent* AimingComponentToSet);
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
+		UTankAimingComponent* GetAimingComponent() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 		void InitBarrel(UTankBarrel* BarrelToSet);
 
 	UFUNCTION(BlueprintCallable, Category = "Firing")
