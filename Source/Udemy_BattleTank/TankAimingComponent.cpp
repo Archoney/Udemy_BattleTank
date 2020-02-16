@@ -28,7 +28,7 @@ void UTankAimingComponent::AimAt(const FVector& TargetLocation)
 
 	if (VelocityFound)
 	{
-		auto AimDirection = TossVelocity.GetSafeNormal();
+		AimDirection = TossVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
 	}
 }
@@ -54,13 +54,18 @@ void UTankAimingComponent::Fire()
 
 void UTankAimingComponent::Update(float DeltaSeconds)
 {
-	if (FiringState == FiringState::Reloading)
+	if (TimeSinceLastFire <= ReloadTimeInSeconds)
 	{
 		TimeSinceLastFire += DeltaSeconds;
-		if (TimeSinceLastFire > ReloadTimeInSeconds)
-		{
-			FiringState = FiringState::Aiming;
-		}
+		FiringState = FiringState::Reloading;
+	}
+	else if (AimDirection.Equals(Barrel->GetForwardVector(), 0.01f))
+	{
+		FiringState = FiringState::Locked;
+	}
+	else
+	{
+		FiringState = FiringState::Aiming;
 	}
 }
 

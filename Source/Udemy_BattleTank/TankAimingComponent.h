@@ -9,7 +9,7 @@ enum class FiringState : uint8
 {
 	Reloading,
 	Aiming,
-	Ready
+	Locked
 };
 
 class UTankBarrel;
@@ -51,4 +51,5 @@ private:
 	float TimeSinceLastFire{ 0.0f };
 
 	void MoveBarrelTowards(const FVector& Direction);
+	FVector AimDirection;
 };
