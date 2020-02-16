@@ -38,6 +38,11 @@ void ATankPawn::Fire()
 	}
 }
 
+UTankAimingComponent* ATankPawn::GetAimingComponent() const
+{
+	return AimingComponent;
+}
+
 void ATankPawn::InitAimingComponent(UTankAimingComponent* TankAimingComponent, 
 									UTankBarrel* TankBarrel, 
 									UTankTurret* TankTurret)

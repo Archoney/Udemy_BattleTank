@@ -26,6 +26,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
 
+	UTankAimingComponent* GetAimingComponent() const;
+
 protected:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void InitAimingComponent(UTankAimingComponent* TankAimingComponent,
@@ -46,10 +48,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadTimeInSeconds = 3.0f;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Setup")
-	UTankAimingComponent* AimingComponent{ nullptr };
-
 private:
+	UTankAimingComponent* AimingComponent{ nullptr };
 	UTankNavMovementComponent* MovementComponent{ nullptr };
 	double LastFireTime{ 0.0 };
 };

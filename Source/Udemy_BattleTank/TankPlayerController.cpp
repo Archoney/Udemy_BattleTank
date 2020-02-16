@@ -3,14 +3,20 @@
 #include "Engine/World.h"
 #include "Camera/PlayerCameraManager.h"
 
-void ATankPlayerController::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
 void ATankPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+
+	if (!IsCrosshairCreated)
+	{
+		auto PlayerAimingComponent = GetControlledTank()->GetAimingComponent();
+		if (PlayerAimingComponent)
+		{
+			AimingComponentReady(PlayerAimingComponent);
+			IsCrosshairCreated = true;
+		}
+	}
+
 	AimAtCrosshair();
 }
 
