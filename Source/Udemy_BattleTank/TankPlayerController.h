@@ -15,18 +15,16 @@ public:
 	void BeginPlay() override;
 	void Tick(float DeltaSeconds) override;
 
-	void AimAtCrosshair();
-
-	APawn* GetPlayerTank() const;
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	void AimingComponentReady(UTankAimingComponent* AimingComponent);
 
 protected:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void SetCrosshairPositionOnCanvas(const FVector2D& Position);
 
-	UPROPERTY(BlueprintReadOnly, Category = "Setup")
+private:
 	UTankAimingComponent* AimingComponent{ nullptr };
 
-private:
 	TOptional<FVector> GetSightRayHitLocation() const;
 	TOptional<FVector> GetLookDirection() const;
 	TOptional<FVector> GetLookVectorHitLocation(const FVector& LookDirection) const;

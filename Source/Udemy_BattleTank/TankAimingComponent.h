@@ -29,6 +29,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
 
+	void Update(float DeltaSeconds);
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Setup")
 	FiringState FiringState{ FiringState::Reloading };
@@ -46,7 +48,7 @@ private:
 	UTankBarrel* Barrel{ nullptr };
 	UTankTurret* Turret{ nullptr };
 
-	double LastFireTime{ 0.0 };
+	float TimeSinceLastFire{ 0.0f };
 
 	void MoveBarrelTowards(const FVector& Direction);
 };

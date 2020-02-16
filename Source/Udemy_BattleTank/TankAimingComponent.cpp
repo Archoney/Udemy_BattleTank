@@ -9,17 +9,13 @@ void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto TankPawn = GetOwner();
-	check(TankPawn && "UTankAimingComponent - Owner is null!");
-	auto TankBarrel = TankPawn->GetComponentByClass(UTankBarrel::StaticClass());
+	auto TankBarrel = GetOwner()->GetComponentByClass(UTankBarrel::StaticClass());
 	check(TankBarrel && "UTankAimingComponent - Barrel is null!");
-	auto TankTurret = TankPawn->GetComponentByClass(UTankTurret::StaticClass());
+	auto TankTurret = GetOwner()->GetComponentByClass(UTankTurret::StaticClass());
 	check(TankTurret && "UTankAimingComponent - Turret is null!");
 
 	Barrel = Cast<UTankBarrel>(TankBarrel);
 	Turret = Cast<UTankTurret>(TankTurret);
-
-	LastFireTime = FPlatformTime::Seconds();
 }
 
 void UTankAimingComponent::AimAt(const FVector& TargetLocation)
@@ -41,8 +37,7 @@ void UTankAimingComponent::Fire()
 {
 	check(ProjectileBlueprint && "UTankAimingComponent - ProjectileBlueprint is null!");
 
-	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-	if (isReloaded)
+	if (FiringState != FiringState::Reloading)
 	{
 		auto Projectile = GetWorld()->SpawnActor< AProjectile >(
 			ProjectileBlueprint,
@@ -51,7 +46,21 @@ void UTankAimingComponent::Fire()
 		
 		check(Projectile && "UTankAimingComponent - Projectile is null!");
 		Projectile->Launch(LaunchSpeed);
-		LastFireTime = FPlatformTime::Seconds();
+
+		TimeSinceLastFire = 0.0f;
+		FiringState = FiringState::Reloading;
+	}
+}
+
+void UTankAimingComponent::Update(float DeltaSeconds)
+{
+	if (FiringState == FiringState::Reloading)
+	{
+		TimeSinceLastFire += DeltaSeconds;
+		if (TimeSinceLastFire > ReloadTimeInSeconds)
+		{
+			FiringState = FiringState::Aiming;
+		}
 	}
 }
 

@@ -1,5 +1,4 @@
 #include "TankAIController.h"
-#include "TankPawn.h"
 #include "Engine/World.h"
 #include "TankPlayerController.h"
 #include "TankAimingComponent.h"
@@ -8,10 +7,7 @@ void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto Pawn = GetPawn();
-	check(Pawn && "ATankAIController - pawn is null!");
-	auto AITank = Cast<ATankPawn>(Pawn);
-	auto TankAimingComponent = AITank->GetComponentByClass(UTankAimingComponent::StaticClass());
+	auto TankAimingComponent = GetPawn()->GetComponentByClass(UTankAimingComponent::StaticClass());
 	check(TankAimingComponent && "ATankAIController - Tank Aiming Controller is null!");
 	AimingComponent = Cast<UTankAimingComponent>(TankAimingComponent);
 }
@@ -22,12 +18,12 @@ void ATankAIController::Tick(float DeltaSeconds)
 
 	if (!PlayerTank)
 	{
-		PlayerTank = Cast<ATankPlayerController>(
-			GetWorld()->GetFirstPlayerController())->GetPlayerTank();
-		ensure(PlayerTank && "ATankAIController - PlayerTank is null!");
+		PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 	}
 	else
 	{
+		AimingComponent->Update(DeltaSeconds);
+
 		// AI firing
 		AimingComponent->AimAt(PlayerTank->GetActorLocation());
 		AimingComponent->Fire();

@@ -1,5 +1,4 @@
 #include "TankPlayerController.h"
-#include "TankPawn.h"
 #include "Engine/World.h"
 #include "Camera/PlayerCameraManager.h"
 #include "TankAimingComponent.h"
@@ -8,33 +7,23 @@ void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto Pawn = GetPawn();
-	check(Pawn && "ATankPlayerController - pawn is null!");
-	auto PlayerTank = Cast<ATankPawn>(Pawn);
-	auto TankAimingComponent = PlayerTank->GetComponentByClass(UTankAimingComponent::StaticClass());
+	auto TankAimingComponent = GetPawn()->GetComponentByClass(UTankAimingComponent::StaticClass());
 	check(TankAimingComponent && "ATankPlayerController - Tank Aiming Controller is null!");
 	AimingComponent = Cast<UTankAimingComponent>(TankAimingComponent);
+	AimingComponentReady(AimingComponent);
 }
 
 void ATankPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	AimAtCrosshair();
-}
+	AimingComponent->Update(DeltaSeconds);
 
-void ATankPlayerController::AimAtCrosshair()
-{
 	auto HitLocation = GetSightRayHitLocation();
 	if (HitLocation)
 	{
 		AimingComponent->AimAt(HitLocation.GetValue());
 	}
-}
-
-APawn* ATankPlayerController::GetPlayerTank() const
-{
-	return GetPawn();
 }
 
 void ATankPlayerController::SetCrosshairPositionOnCanvas(const FVector2D& Position)

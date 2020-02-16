@@ -5,11 +5,9 @@ void UTankNavMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto TankPawn = GetOwner();
-	check(TankPawn && "UTankNavMovementComponent - Owner is null!");
-	auto TankLeftTrack = TankPawn->GetComponentsByTag(UTankTrack::StaticClass(), "LeftTrack")[0];
+	auto TankLeftTrack = GetOwner()->GetComponentsByTag(UTankTrack::StaticClass(), "LeftTrack")[0];
 	check(TankLeftTrack && "UTankNavMovementComponent - LeftTrack is null!");
-	auto TankRightTrack = TankPawn->GetComponentsByTag(UTankTrack::StaticClass(), "RightTrack")[0];
+	auto TankRightTrack = GetOwner()->GetComponentsByTag(UTankTrack::StaticClass(), "RightTrack")[0];
 	check(TankRightTrack && "UTankNavMovementComponent - RightTrack is null!");
 
 	LeftTrack = Cast<UTankTrack>(TankLeftTrack);
