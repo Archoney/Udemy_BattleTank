@@ -5,6 +5,11 @@
 #include "TankTurret.h"
 #include "Projectile.h"
 
+UTankAimingComponent::UTankAimingComponent()
+{
+	PrimaryComponentTick.bCanEverTick = true;
+}
+
 void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -52,11 +57,13 @@ void UTankAimingComponent::Fire()
 	}
 }
 
-void UTankAimingComponent::Update(float DeltaSeconds)
+void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
 	if (TimeSinceLastFire <= ReloadTimeInSeconds)
 	{
-		TimeSinceLastFire += DeltaSeconds;
+		TimeSinceLastFire += DeltaTime;
 		FiringState = FiringState::Reloading;
 	}
 	else if (AimDirection.Equals(Barrel->GetForwardVector(), 0.01f))

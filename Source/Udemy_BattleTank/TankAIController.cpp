@@ -22,8 +22,6 @@ void ATankAIController::Tick(float DeltaSeconds)
 	}
 	else
 	{
-		AimingComponent->Update(DeltaSeconds);
-
 		// AI firing
 		AimingComponent->AimAt(PlayerTank->GetActorLocation());
 		AimingComponent->Fire();

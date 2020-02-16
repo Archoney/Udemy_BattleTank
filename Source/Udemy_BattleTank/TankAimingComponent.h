@@ -22,6 +22,8 @@ class UDEMY_BATTLETANK_API UTankAimingComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
+	UTankAimingComponent();
+
 	void BeginPlay() override;
 
 	void AimAt(const FVector& TargetLocation);
@@ -29,7 +31,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
 
-	void Update(float DeltaSeconds);
+	void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Setup")

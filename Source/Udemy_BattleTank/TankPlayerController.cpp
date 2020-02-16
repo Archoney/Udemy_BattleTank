@@ -17,8 +17,6 @@ void ATankPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	AimingComponent->Update(DeltaSeconds);
-
 	auto HitLocation = GetSightRayHitLocation();
 	if (HitLocation)
 	{
