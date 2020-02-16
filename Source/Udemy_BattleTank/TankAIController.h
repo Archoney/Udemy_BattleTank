@@ -5,6 +5,7 @@
 #include "TankAIController.generated.h"
 
 class ATankPawn;
+class UTankAimingComponent;
 
 UCLASS()
 class UDEMY_BATTLETANK_API ATankAIController : public AAIController
@@ -17,9 +18,9 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	float AcceptanceRadius = 1000.0f;
+	float FollowRadiusFromPlayer = 1000.0f;
 
 private:
-	ATankPawn* ControlledTank;
-	ATankPawn* PlayerControlledTank;
+	UTankAimingComponent* AimingComponent{ nullptr };
+	APawn* PlayerTank{ nullptr };
 };

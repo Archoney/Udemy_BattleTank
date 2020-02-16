@@ -2,20 +2,23 @@
 #include "TankPawn.h"
 #include "Engine/World.h"
 #include "Camera/PlayerCameraManager.h"
+#include "TankAimingComponent.h"
+
+void ATankPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	auto Pawn = GetPawn();
+	check(Pawn && "ATankPlayerController - pawn is null!");
+	auto PlayerTank = Cast<ATankPawn>(Pawn);
+	auto TankAimingComponent = PlayerTank->GetComponentByClass(UTankAimingComponent::StaticClass());
+	check(TankAimingComponent && "ATankPlayerController - Tank Aiming Controller is null!");
+	AimingComponent = Cast<UTankAimingComponent>(TankAimingComponent);
+}
 
 void ATankPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
-	if (!IsCrosshairCreated)
-	{
-		auto PlayerAimingComponent = GetControlledTank()->GetAimingComponent();
-		if (PlayerAimingComponent)
-		{
-			AimingComponentReady(PlayerAimingComponent);
-			IsCrosshairCreated = true;
-		}
-	}
 
 	AimAtCrosshair();
 }
@@ -25,15 +28,13 @@ void ATankPlayerController::AimAtCrosshair()
 	auto HitLocation = GetSightRayHitLocation();
 	if (HitLocation)
 	{
-		GetControlledTank()->AimAt(HitLocation.GetValue());
+		AimingComponent->AimAt(HitLocation.GetValue());
 	}
 }
 
-ATankPawn* ATankPlayerController::GetControlledTank() const
+APawn* ATankPlayerController::GetPlayerTank() const
 {
-	auto ControlledTank = Cast<ATankPawn>(GetPawn());
-	check(ControlledTank && "ATankPlayerController - ControlledTank is null!");
-	return ControlledTank;
+	return GetPawn();
 }
 
 void ATankPlayerController::SetCrosshairPositionOnCanvas(const FVector2D& Position)

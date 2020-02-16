@@ -1,20 +1,29 @@
 #include "TankNavMovementComponent.h"
 #include "TankTrack.h"
 
+void UTankNavMovementComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	auto TankPawn = GetOwner();
+	check(TankPawn && "UTankNavMovementComponent - Owner is null!");
+	auto TankLeftTrack = TankPawn->GetComponentsByTag(UTankTrack::StaticClass(), "LeftTrack")[0];
+	check(TankLeftTrack && "UTankNavMovementComponent - LeftTrack is null!");
+	auto TankRightTrack = TankPawn->GetComponentsByTag(UTankTrack::StaticClass(), "RightTrack")[0];
+	check(TankRightTrack && "UTankNavMovementComponent - RightTrack is null!");
+
+	LeftTrack = Cast<UTankTrack>(TankLeftTrack);
+	RightTrack = Cast<UTankTrack>(TankRightTrack);
+}
+
 void UTankNavMovementComponent::IntendMoveForward(float Throw)
 {
-	check(LeftTrack && "UTankNavMovementComponent - Left track is null!");
-	check(RightTrack && "UTankNavMovementComponent - Right track is null!");
-
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
 }
 
 void UTankNavMovementComponent::IntendRotateRight(float Throw)
 {
-	check(LeftTrack && "UTankNavMovementComponent - Left track is null!");
-	check(RightTrack && "UTankNavMovementComponent - Right track is null!");
-
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(-Throw);
 }
@@ -26,13 +35,4 @@ void UTankNavMovementComponent::RequestDirectMove(const FVector& MoveVelocity, b
 
 	IntendMoveForward(FVector::DotProduct(TankForward, AIForwardIntention));
 	IntendRotateRight(FVector::CrossProduct(TankForward, AIForwardIntention).Z);
-}
-
-void UTankNavMovementComponent::InitTracks(UTankTrack* TankLeftTrack, UTankTrack* TankRightTrack)
-{
-	check(TankLeftTrack && "UTankNavMovementComponent - Left track is null!");
-	check(TankRightTrack && "UTankNavMovementComponent - Right track is null!");
-
-	LeftTrack = TankLeftTrack;
-	RightTrack = TankRightTrack;
 }

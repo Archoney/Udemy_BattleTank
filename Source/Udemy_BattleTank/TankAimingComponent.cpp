@@ -3,18 +3,32 @@
 #include "Kismet/GameplayStatics.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
+#include "Projectile.h"
 
-UTankAimingComponent::UTankAimingComponent()
+void UTankAimingComponent::BeginPlay()
 {
-	PrimaryComponentTick.bCanEverTick = false;
+	Super::BeginPlay();
+
+	auto TankPawn = GetOwner();
+	check(TankPawn && "UTankAimingComponent - Owner is null!");
+	auto TankBarrel = TankPawn->GetComponentByClass(UTankBarrel::StaticClass());
+	check(TankBarrel && "UTankAimingComponent - Barrel is null!");
+	auto TankTurret = TankPawn->GetComponentByClass(UTankTurret::StaticClass());
+	check(TankTurret && "UTankAimingComponent - Turret is null!");
+
+	Barrel = Cast<UTankBarrel>(TankBarrel);
+	Turret = Cast<UTankTurret>(TankTurret);
+
+	LastFireTime = FPlatformTime::Seconds();
 }
 
-void UTankAimingComponent::AimAt(const FVector& TargetLocation, float LaunchSpeed)
+void UTankAimingComponent::AimAt(const FVector& TargetLocation)
 {
 	FVector TossVelocity;
 	auto StartLocation = Barrel->GetSocketLocation(FName("BarrelEnd"));
 	auto VelocityFound = UGameplayStatics::SuggestProjectileVelocity(
-		this, TossVelocity, StartLocation, TargetLocation, LaunchSpeed, false, 0.f, 0, ESuggestProjVelocityTraceOption::DoNotTrace);
+		this, TossVelocity, StartLocation, TargetLocation, LaunchSpeed, 
+		false, 0.f, 0, ESuggestProjVelocityTraceOption::DoNotTrace);
 
 	if (VelocityFound)
 	{
@@ -23,29 +37,26 @@ void UTankAimingComponent::AimAt(const FVector& TargetLocation, float LaunchSpee
 	}
 }
 
-UTankBarrel* UTankAimingComponent::GetBarrel() const
+void UTankAimingComponent::Fire()
 {
-	check(Barrel && "UTankAimingComponent - Barrel is null!");
-	return Barrel;
-}
+	check(ProjectileBlueprint && "UTankAimingComponent - ProjectileBlueprint is null!");
 
-void UTankAimingComponent::InitBarrel(UTankBarrel* TankBarrel)
-{
-	check(TankBarrel && "UTankAimingComponent - Barrel is null!");
-	Barrel = TankBarrel;
-}
-
-void UTankAimingComponent::InitTurret(UTankTurret* TankTurret)
-{
-	check(TankTurret && "UTankAimingComponent - Turret is null!");
-	Turret = TankTurret;
+	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+	if (isReloaded)
+	{
+		auto Projectile = GetWorld()->SpawnActor< AProjectile >(
+			ProjectileBlueprint,
+			Barrel->GetSocketLocation(FName("BarrelEnd")),
+			Barrel->GetSocketRotation(FName("BarrelEnd")));
+		
+		check(Projectile && "UTankAimingComponent - Projectile is null!");
+		Projectile->Launch(LaunchSpeed);
+		LastFireTime = FPlatformTime::Seconds();
+	}
 }
 
 void UTankAimingComponent::MoveBarrelTowards(const FVector& Direction)
 {
-	check(Barrel && "UTankAimingComponent - Barrel is null!");
-	check(Turret && "UTankAimingComponent - Turret is null!");
-
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimRotator = Direction.Rotation();
 	auto DeltaRotator = AimRotator - BarrelRotator;

@@ -14,6 +14,7 @@ enum class FiringState : uint8
 
 class UTankBarrel;
 class UTankTurret;
+class AProjectile;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UDEMY_BATTLETANK_API UTankAimingComponent : public UActorComponent
@@ -21,22 +22,31 @@ class UDEMY_BATTLETANK_API UTankAimingComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	UTankAimingComponent();
+	void BeginPlay() override;
 
-	void InitBarrel(UTankBarrel* TankBarrel);
-	void InitTurret(UTankTurret* TankTurret);
+	void AimAt(const FVector& TargetLocation);
 
-	void AimAt(const FVector& TargetLocation, float LaunchSpeed);
-
-	UTankBarrel* GetBarrel() const;
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	void Fire();
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Setup")
 	FiringState FiringState{ FiringState::Reloading };
 
-private:
-	void MoveBarrelTowards(const FVector& Direction);
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<AProjectile> ProjectileBlueprint;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float LaunchSpeed = 10000.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float ReloadTimeInSeconds = 3.0f;
+
+private:
 	UTankBarrel* Barrel{ nullptr };
 	UTankTurret* Turret{ nullptr };
+
+	double LastFireTime{ 0.0 };
+
+	void MoveBarrelTowards(const FVector& Direction);
 };
