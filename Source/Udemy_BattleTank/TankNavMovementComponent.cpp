@@ -16,14 +16,14 @@ void UTankNavMovementComponent::BeginPlay()
 
 void UTankNavMovementComponent::IntendMoveForward(float Throw)
 {
-	LeftTrack->SetThrottle(Throw);
-	RightTrack->SetThrottle(Throw);
+	LeftTrack->SetThrottle(Throw / 2.0f);
+	RightTrack->SetThrottle(Throw / 2.0f);
 }
 
 void UTankNavMovementComponent::IntendRotateRight(float Throw)
 {
-	LeftTrack->SetThrottle(Throw);
-	RightTrack->SetThrottle(-Throw);
+	LeftTrack->SetThrottle(Throw / 2.0f);
+	RightTrack->SetThrottle(-Throw / 2.0f);
 }
 
 void UTankNavMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)

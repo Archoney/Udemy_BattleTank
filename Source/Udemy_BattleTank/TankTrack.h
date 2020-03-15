@@ -12,15 +12,22 @@ class UDEMY_BATTLETANK_API UTankTrack : public UStaticMeshComponent
 public:
 	UTankTrack();
 
-	UFUNCTION(BlueprintCallable, Category = "Input")
-	void SetThrottle(float Throttle);	
-	
-	void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	void BeginPlay() override;
 
-	UPROPERTY(BlueprintReadWrite, Category = "Moving")
-	bool IsOnGround{false};
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void SetThrottle(float ThrottleValue);
+
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	float MaxDrivingForce = 50000000.0f;
+	float MaxDrivingForce = 100000000.0f;
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+private:
+	void ApplySidewaysForce();
+	void DriveTrack();
+
+	float Throttle{0.0f};
 };

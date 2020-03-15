@@ -1,37 +1,47 @@
 #include "TankTrack.h"
+#include "Components/PrimitiveComponent.h"
 
 UTankTrack::UTankTrack()
 {
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UTankTrack::SetThrottle(float Throttle)
+void UTankTrack::BeginPlay()
 {
-	if (IsOnGround)
-	{
-		auto ForceApplied = GetForwardVector() * MaxDrivingForce * Throttle;
-		auto ForceLocation = GetComponentLocation();
+	Super::BeginPlay();
 
-		auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
-		TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
-	}
+	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
 }
 
-void UTankTrack::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UTankTrack::SetThrottle(float ThrottleValue)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	Throttle = FMath::Clamp(Throttle + ThrottleValue, -1.0f, 1.0f);
+}
 
-	IsOnGround = FMath::Abs(GetComponentVelocity().Z) <= 100.0f;
+void UTankTrack::DriveTrack()
+{
+	auto ForceApplied = GetForwardVector() * MaxDrivingForce * Throttle;
+	auto ForceLocation = GetComponentLocation();
 
-	if (IsOnGround)
-	{
-		auto SidewaysSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
-		auto CorrectionAcceleration = -SidewaysSpeed / DeltaTime * GetRightVector();
+	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
+	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
+}
 
-		auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
-		auto CorrectionForceForOneTrack = CorrectionAcceleration * TankRoot->GetMass() / 2;
+void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	ApplySidewaysForce();
+	DriveTrack();
+	Throttle = 0.0f;
+}
 
-		auto ForceLocation = GetComponentLocation();
-		TankRoot->AddForceAtLocation(CorrectionForceForOneTrack, ForceLocation);
-	}
+void UTankTrack::ApplySidewaysForce()
+{
+	auto SidewaysSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
+	auto CorrectionAcceleration = -SidewaysSpeed / GetWorld()->GetDeltaSeconds() * GetRightVector();
+
+	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
+	auto CorrectionForceForOneTrack = CorrectionAcceleration * TankRoot->GetMass() / 2;
+
+	auto ForceLocation = GetComponentLocation();
+	TankRoot->AddForceAtLocation(CorrectionForceForOneTrack, ForceLocation);
 }
