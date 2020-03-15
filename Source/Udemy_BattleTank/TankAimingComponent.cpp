@@ -57,6 +57,11 @@ void UTankAimingComponent::Fire()
 	}
 }
 
+bool UTankAimingComponent::IsLocked() const
+{
+	return FiringState == FiringState::Locked;
+}
+
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);

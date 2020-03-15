@@ -24,7 +24,10 @@ void ATankAIController::Tick(float DeltaSeconds)
 	{
 		// AI firing
 		AimingComponent->AimAt(PlayerTank->GetActorLocation());
-		AimingComponent->Fire();
+		if (AimingComponent->IsLocked())
+		{
+			//AimingComponent->Fire();
+		}
 
 		// AI moving
 		MoveToActor(PlayerTank, FollowRadiusFromPlayer);

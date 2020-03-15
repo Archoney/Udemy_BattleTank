@@ -33,6 +33,8 @@ public:
 
 	void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	bool IsLocked() const;
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Setup")
 	FiringState FiringState{ FiringState::Reloading };
