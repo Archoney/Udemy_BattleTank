@@ -9,7 +9,8 @@ enum class FiringState : uint8
 {
 	Reloading,
 	Aiming,
-	Locked
+	Locked,
+	NoAmmo
 };
 
 class UTankBarrel;
@@ -47,6 +48,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadTimeInSeconds = 3.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Firing")
+	uint8 Ammo = 44;
 
 private:
 	UTankBarrel* Barrel{ nullptr };

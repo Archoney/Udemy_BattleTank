@@ -42,7 +42,7 @@ void UTankAimingComponent::Fire()
 {
 	check(ProjectileBlueprint && "UTankAimingComponent - ProjectileBlueprint is null!");
 
-	if (FiringState != FiringState::Reloading)
+	if (FiringState == FiringState::Aiming || FiringState == FiringState::Locked )
 	{
 		auto Projectile = GetWorld()->SpawnActor< AProjectile >(
 			ProjectileBlueprint,
@@ -53,7 +53,9 @@ void UTankAimingComponent::Fire()
 		Projectile->Launch(LaunchSpeed);
 
 		TimeSinceLastFire = 0.0f;
-		FiringState = FiringState::Reloading;
+		Ammo -= 1;
+
+		Ammo > 0 ? FiringState = FiringState::Reloading : FiringState = FiringState::NoAmmo;
 	}
 }
 
@@ -66,18 +68,21 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (TimeSinceLastFire <= ReloadTimeInSeconds)
+	if (FiringState != FiringState::NoAmmo)
 	{
-		TimeSinceLastFire += DeltaTime;
-		FiringState = FiringState::Reloading;
-	}
-	else if (AimDirection.Equals(Barrel->GetForwardVector(), 0.01f))
-	{
-		FiringState = FiringState::Locked;
-	}
-	else
-	{
-		FiringState = FiringState::Aiming;
+		if (TimeSinceLastFire <= ReloadTimeInSeconds)
+		{
+			TimeSinceLastFire += DeltaTime;
+			FiringState = FiringState::Reloading;
+		}
+		else if (AimDirection.Equals(Barrel->GetForwardVector(), 0.01f))
+		{
+			FiringState = FiringState::Locked;
+		}
+		else
+		{
+			FiringState = FiringState::Aiming;
+		}
 	}
 }
 
