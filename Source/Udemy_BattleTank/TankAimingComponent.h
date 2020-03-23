@@ -38,23 +38,27 @@ public:
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Setup")
-	FiringState FiringState{ FiringState::Reloading };
+	FiringState FiringState { FiringState::Reloading };
 
-	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	UPROPERTY(BlueprintReadWrite, Category = "Setup")
 	TSubclassOf<AProjectile> ProjectileBlueprint;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	UPROPERTY(BlueprintReadWrite, Category = "Firing")
+	uint8 Ammo = 5;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Firing")
 	float LaunchSpeed = 10000.0f;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	UPROPERTY(BlueprintReadWrite, Category = "Firing")
 	float ReloadTimeInSeconds = 3.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Firing")
-	uint8 Ammo = 44;
+	UPROPERTY(BlueprintReadWrite, Category = "Firing")
+	bool HighArc = false;
 
 private:
 	UTankBarrel* Barrel{ nullptr };
 	UTankTurret* Turret{ nullptr };
+
 
 	float TimeSinceLastFire{ 0.0f };
 

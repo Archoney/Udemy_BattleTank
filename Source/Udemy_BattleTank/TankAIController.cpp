@@ -24,9 +24,9 @@ void ATankAIController::Tick(float DeltaSeconds)
 	{
 		// AI firing
 		AimingComponent->AimAt(PlayerTank->GetActorLocation());
-		if (AimingComponent->IsLocked())
+		if (AimingComponent->IsLocked() && CanFire)
 		{
-			//AimingComponent->Fire();
+			AimingComponent->Fire();
 		}
 
 		// AI moving

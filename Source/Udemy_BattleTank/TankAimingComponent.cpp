@@ -29,7 +29,7 @@ void UTankAimingComponent::AimAt(const FVector& TargetLocation)
 	auto StartLocation = Barrel->GetSocketLocation(FName("BarrelEnd"));
 	auto VelocityFound = UGameplayStatics::SuggestProjectileVelocity(
 		this, TossVelocity, StartLocation, TargetLocation, LaunchSpeed, 
-		false, 0.f, 0, ESuggestProjVelocityTraceOption::DoNotTrace);
+		HighArc, 0.f, 0, ESuggestProjVelocityTraceOption::DoNotTrace);
 
 	if (VelocityFound)
 	{
@@ -68,21 +68,22 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (FiringState != FiringState::NoAmmo)
+	if (FiringState == FiringState::NoAmmo)
 	{
-		if (TimeSinceLastFire <= ReloadTimeInSeconds)
-		{
-			TimeSinceLastFire += DeltaTime;
-			FiringState = FiringState::Reloading;
-		}
-		else if (AimDirection.Equals(Barrel->GetForwardVector(), 0.01f))
-		{
-			FiringState = FiringState::Locked;
-		}
-		else
-		{
-			FiringState = FiringState::Aiming;
-		}
+		return;
+	}
+	else if (TimeSinceLastFire <= ReloadTimeInSeconds)
+	{
+		TimeSinceLastFire += DeltaTime;
+		FiringState = FiringState::Reloading;
+	}
+	else if (AimDirection.Equals(Barrel->GetForwardVector(), 0.05f))
+	{
+		FiringState = FiringState::Locked;
+	}
+	else
+	{
+		FiringState = FiringState::Aiming;
 	}
 }
 

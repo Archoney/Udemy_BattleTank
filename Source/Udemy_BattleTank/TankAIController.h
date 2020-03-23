@@ -20,6 +20,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	float FollowRadiusFromPlayer = 8000.0f;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	bool CanFire = true;
+
 private:
 	UTankAimingComponent* AimingComponent{ nullptr };
 	APawn* PlayerTank{ nullptr };
