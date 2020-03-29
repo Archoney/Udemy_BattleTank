@@ -42,6 +42,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	float LifeSpan = 5.0f;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float BaseDamage = 20.0f;
+
 private:
 	UProjectileMovementComponent* MovementComponent{ nullptr };
 };

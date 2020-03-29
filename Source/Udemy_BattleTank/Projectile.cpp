@@ -6,6 +6,8 @@
 #include "PhysicsEngine/RadialForceComponent.h"
 #include "Engine//World.h"
 #include "TimerManager.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/DamageType.h"
 
 AProjectile::AProjectile():
 	CollisionMesh{ CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Mesh")) },
@@ -50,6 +52,9 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 	LaunchBlast->Deactivate();
 	ImpactBlast->Activate();
 	ExplosionForce->FireImpulse();
+	UGameplayStatics::ApplyRadialDamage(
+		this, BaseDamage, GetActorLocation(), ExplosionForce->Radius,
+		UDamageType::StaticClass(), TArray<AActor*>());
 
 	SetRootComponent(ImpactBlast);
 	CollisionMesh->DestroyComponent();
