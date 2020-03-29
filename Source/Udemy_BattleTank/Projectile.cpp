@@ -3,11 +3,13 @@
 #include "Components/PrimitiveComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "PhysicsEngine/RadialForceComponent.h"
 
 AProjectile::AProjectile():
 	CollisionMesh{ CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Mesh")) },
 	LaunchBlast{ CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast")) },
 	ImpactBlast{ CreateDefaultSubobject<UParticleSystemComponent>(FName("Impact Blast")) },
+	ExplosionForce{ CreateDefaultSubobject<URadialForceComponent>(FName("Explosion Force")) },
 	MovementComponent{ CreateDefaultSubobject<UProjectileMovementComponent>(FName("Movement Component")) }
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -20,6 +22,8 @@ AProjectile::AProjectile():
 
 	ImpactBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	ImpactBlast->bAutoActivate = false;
+
+	ExplosionForce->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 	MovementComponent->bAutoActivate = false;
 }
@@ -42,4 +46,5 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 {
 	LaunchBlast->Deactivate();
 	ImpactBlast->Activate();
+	ExplosionForce->FireImpulse();
 }

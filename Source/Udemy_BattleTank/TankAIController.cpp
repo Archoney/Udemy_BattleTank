@@ -23,7 +23,8 @@ void ATankAIController::Tick(float DeltaSeconds)
 	else
 	{
 		// AI firing
-		AimingComponent->AimAt(PlayerTank->GetActorLocation());
+		auto Target = PlayerTank->GetActorLocation() + FVector{0.0f, 0.0f, 120.0f};
+		AimingComponent->AimAt(Target);
 		if (AimingComponent->IsLocked() && CanFire)
 		{
 			AimingComponent->Fire();

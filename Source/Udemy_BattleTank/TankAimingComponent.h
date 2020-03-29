@@ -44,13 +44,13 @@ protected:
 	TSubclassOf<AProjectile> ProjectileBlueprint;
 
 	UPROPERTY(BlueprintReadWrite, Category = "Firing")
-	uint8 Ammo = 5;
+	uint8 Ammo = 20;
 
 	UPROPERTY(BlueprintReadWrite, Category = "Firing")
 	float LaunchSpeed = 10000.0f;
 
 	UPROPERTY(BlueprintReadWrite, Category = "Firing")
-	float ReloadTimeInSeconds = 3.0f;
+	float ReloadTimeInSeconds = 2.0f;
 
 	UPROPERTY(BlueprintReadWrite, Category = "Firing")
 	bool HighArc = false;

@@ -7,6 +7,7 @@
 class UProjectileMovementComponent;
 class UParticleSystemComponent;
 class UPrimitiveComponent;
+class URadialForceComponent;
 
 UCLASS()
 class UDEMY_BATTLETANK_API AProjectile : public AActor
@@ -34,6 +35,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UParticleSystemComponent* ImpactBlast{ nullptr };
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	URadialForceComponent* ExplosionForce{ nullptr };
 
 private:
 	UProjectileMovementComponent* MovementComponent{ nullptr };
