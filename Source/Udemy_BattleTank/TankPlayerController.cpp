@@ -2,6 +2,7 @@
 #include "Engine/World.h"
 #include "Camera/PlayerCameraManager.h"
 #include "TankAimingComponent.h"
+#include "TankPawn.h"
 
 void ATankPlayerController::BeginPlay()
 {
@@ -22,6 +23,22 @@ void ATankPlayerController::Tick(float DeltaSeconds)
 	{
 		AimingComponent->AimAt(HitLocation.GetValue());
 	}
+}
+
+void ATankPlayerController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	auto PossessedTank = Cast<ATankPawn>(InPawn);
+	if (PossessedTank)
+	{
+		PossessedTank->TankDestroyed.AddUniqueDynamic(this, &ATankPlayerController::OnTankDestroyed);
+	}
+}
+
+void ATankPlayerController::OnTankDestroyed()
+{
+	UE_LOG(LogTemp, Warning, TEXT("DEAD!"));
 }
 
 void ATankPlayerController::SetCrosshairPositionOnCanvas(const FVector2D& Position)

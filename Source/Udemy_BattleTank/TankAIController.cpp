@@ -2,6 +2,7 @@
 #include "Engine/World.h"
 #include "TankPlayerController.h"
 #include "TankAimingComponent.h"
+#include "TankPawn.h"
 
 void ATankAIController::BeginPlay()
 {
@@ -33,4 +34,20 @@ void ATankAIController::Tick(float DeltaSeconds)
 		// AI moving
 		MoveToActor(PlayerTank, FollowRadiusFromPlayer);
 	}
+}
+
+void ATankAIController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	auto PossessedTank = Cast<ATankPawn>(InPawn);
+	if (PossessedTank)
+	{
+		PossessedTank->TankDestroyed.AddUniqueDynamic(this, &ATankAIController::OnTankDestroyed);
+	}
+}
+
+void ATankAIController::OnTankDestroyed()
+{
+	UE_LOG(LogTemp, Warning, TEXT("AI DEAD!"));
 }

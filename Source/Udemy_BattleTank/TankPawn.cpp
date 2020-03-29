@@ -10,6 +10,10 @@ float ATankPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	int32 Damage = FPlatformMath::RoundToInt(Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser));
 	int32 DamageToApply = FMath::Clamp(Damage, 0, BaseHealth);
 	Health -= DamageToApply;
+
+	if (Health <= 0)
+		TankDestroyed.Broadcast();
+
 	return DamageToApply;
 }
 

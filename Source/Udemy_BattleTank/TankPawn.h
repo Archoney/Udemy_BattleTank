@@ -4,6 +4,8 @@
 #include "GameFramework/Pawn.h"
 #include "TankPawn.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDestroyedDelegate);
+
 UCLASS()
 class UDEMY_BATTLETANK_API ATankPawn : public APawn
 {
@@ -16,6 +18,8 @@ public:
 	
 	UFUNCTION(BlueprintPure, Category = "Status")
 	float GetHealthPercent() const;
+
+	FTankDestroyedDelegate TankDestroyed;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")

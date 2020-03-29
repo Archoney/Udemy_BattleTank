@@ -14,9 +14,13 @@ class UDEMY_BATTLETANK_API ATankPlayerController : public APlayerController
 public:
 	void BeginPlay() override;
 	void Tick(float DeltaSeconds) override;
+	void SetPawn(APawn* InPawn) override;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 	void AimingComponentReady(UTankAimingComponent* AimingComponent);
+
+	UFUNCTION()
+	void OnTankDestroyed();
 
 protected:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
