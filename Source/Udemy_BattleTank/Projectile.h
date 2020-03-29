@@ -39,6 +39,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	URadialForceComponent* ExplosionForce{ nullptr };
 
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float LifeSpan = 5.0f;
+
 private:
 	UProjectileMovementComponent* MovementComponent{ nullptr };
 };

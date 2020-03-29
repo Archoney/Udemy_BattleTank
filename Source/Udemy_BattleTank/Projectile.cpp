@@ -4,6 +4,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "PhysicsEngine/RadialForceComponent.h"
+#include "Engine//World.h"
+#include "TimerManager.h"
 
 AProjectile::AProjectile():
 	CollisionMesh{ CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Mesh")) },
@@ -33,6 +35,7 @@ void AProjectile::BeginPlay()
 	Super::BeginPlay();
 
 	CollisionMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
+	SetLifeSpan(LifeSpan);
 }
 
 void AProjectile::Launch(float Speed)
@@ -47,4 +50,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 	LaunchBlast->Deactivate();
 	ImpactBlast->Activate();
 	ExplosionForce->FireImpulse();
+
+	SetRootComponent(ImpactBlast);
+	CollisionMesh->DestroyComponent();
 }
