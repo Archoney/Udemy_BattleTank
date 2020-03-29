@@ -13,6 +13,9 @@ public:
 	ATankPawn();
 
 	float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	
+	UFUNCTION(BlueprintPure, Category = "Status")
+	float GetHealthPercent() const;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")

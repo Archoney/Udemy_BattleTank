@@ -12,3 +12,8 @@ float ATankPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	Health -= DamageToApply;
 	return DamageToApply;
 }
+
+float ATankPawn::GetHealthPercent() const
+{
+	return float(Health) / float(BaseHealth);
+}
