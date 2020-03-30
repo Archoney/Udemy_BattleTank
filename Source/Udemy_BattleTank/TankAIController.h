@@ -22,10 +22,7 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	float FollowRadiusFromPlayer = 8000.0f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	bool CanFire = true;
+	float FollowRadiusFromPlayer = 6000.0f;
 
 private:
 	UTankAimingComponent* AimingComponent{ nullptr };

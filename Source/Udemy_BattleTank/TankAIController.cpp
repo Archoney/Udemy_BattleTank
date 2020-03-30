@@ -23,16 +23,13 @@ void ATankAIController::Tick(float DeltaSeconds)
 	}
 	else
 	{
-		// AI firing
-		auto Target = PlayerTank->GetActorLocation() + FVector{0.0f, 0.0f, 120.0f};
-		AimingComponent->AimAt(Target);
-		if (AimingComponent->IsLocked() && CanFire)
-		{
-			AimingComponent->Fire();
-		}
+		auto MoveResult = MoveToActor(PlayerTank, FollowRadiusFromPlayer);
 
-		// AI moving
-		MoveToActor(PlayerTank, FollowRadiusFromPlayer);
+		auto Target = PlayerTank->GetActorLocation() + FVector{ 0.0f, 0.0f, 120.0f };
+		AimingComponent->AimAt(Target);
+
+		if (AimingComponent->IsLocked())
+			AimingComponent->Fire();
 	}
 }
 
@@ -49,5 +46,6 @@ void ATankAIController::SetPawn(APawn* InPawn)
 
 void ATankAIController::OnTankDestroyed()
 {
-	UE_LOG(LogTemp, Warning, TEXT("AI DEAD!"));
+	GetPawn()->DetachFromControllerPendingDestroy();
+	AimingComponent->OnTankDestroyed();
 }

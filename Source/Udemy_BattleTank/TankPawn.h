@@ -14,6 +14,8 @@ class UDEMY_BATTLETANK_API ATankPawn : public APawn
 public:
 	ATankPawn();
 
+	void BeginPlay() override;
+
 	float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	
 	UFUNCTION(BlueprintPure, Category = "Status")
@@ -23,8 +25,8 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	int32 BaseHealth = 100;
+	int32 BaseHealth {100};
 
 	UPROPERTY(VisibleAnywhere, Category = "Status")
-	int32 Health = BaseHealth;
+	int32 Health {BaseHealth};
 };

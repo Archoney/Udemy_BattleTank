@@ -1,5 +1,6 @@
 #include "TankNavMovementComponent.h"
 #include "TankTrack.h"
+#include "DrawDebugHelpers.h"
 
 void UTankNavMovementComponent::BeginPlay()
 {
@@ -28,9 +29,16 @@ void UTankNavMovementComponent::IntendRotateRight(float Throw)
 
 void UTankNavMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
 {
-	auto TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();
-	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
+	Super::RequestDirectMove(MoveVelocity, bForceMaxSpeed);
 
-	IntendMoveForward(FVector::DotProduct(TankForward, AIForwardIntention));
-	IntendRotateRight(FVector::CrossProduct(TankForward, AIForwardIntention).Z);
+	auto TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal2D();
+	auto AIForwardIntention = MoveVelocity.GetSafeNormal2D();
+
+	//DrawDebugLine(GetWorld(), GetOwner()->GetActorLocation(), GetOwner()->GetActorLocation() + 10000.0 * AIForwardIntention, FColor::Red, false, -1.0f, 0, 100.0f);
+
+	auto RotateIntent = FVector::CrossProduct(TankForward, AIForwardIntention).Z;
+	auto ForwardIntent = FVector::DotProduct(TankForward, AIForwardIntention);
+
+	IntendRotateRight(RotateIntent);
+	IntendMoveForward(ForwardIntent);
 }

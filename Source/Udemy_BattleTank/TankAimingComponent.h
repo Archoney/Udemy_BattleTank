@@ -36,6 +36,9 @@ public:
 
 	bool IsLocked() const;
 
+	UFUNCTION()
+	void OnTankDestroyed();
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Setup")
 	FiringState FiringState { FiringState::Reloading };

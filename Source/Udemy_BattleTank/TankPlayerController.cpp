@@ -19,7 +19,7 @@ void ATankPlayerController::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 
 	auto HitLocation = GetSightRayHitLocation();
-	if (HitLocation)
+	if (!IsDestroyed && HitLocation)
 	{
 		AimingComponent->AimAt(HitLocation.GetValue());
 	}
@@ -38,7 +38,9 @@ void ATankPlayerController::SetPawn(APawn* InPawn)
 
 void ATankPlayerController::OnTankDestroyed()
 {
-	UE_LOG(LogTemp, Warning, TEXT("DEAD!"));
+	StartSpectatingOnly();
+	AimingComponent->OnTankDestroyed();
+	IsDestroyed = true;
 }
 
 void ATankPlayerController::SetCrosshairPositionOnCanvas(const FVector2D& Position)

@@ -33,4 +33,6 @@ private:
 	TOptional<FVector> GetLookDirection() const;
 	TOptional<FVector> GetLookVectorHitLocation(const FVector& LookDirection) const;
 	TOptional<FVector2D> CrosshairCanvasPosition;
+
+	bool IsDestroyed{ false };
 };

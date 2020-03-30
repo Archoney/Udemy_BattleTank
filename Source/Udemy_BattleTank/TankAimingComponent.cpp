@@ -64,6 +64,15 @@ bool UTankAimingComponent::IsLocked() const
 	return FiringState == FiringState::Locked;
 }
 
+void UTankAimingComponent::OnTankDestroyed()
+{
+	Ammo = 0;
+	FiringState = FiringState::NoAmmo;
+
+	Turret->SetSimulatePhysics(true);
+	Barrel->SetSimulatePhysics(true);
+}
+
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
