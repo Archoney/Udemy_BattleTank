@@ -1,33 +1,34 @@
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Components/StaticMeshComponent.h"
+#include "CoreMinimal.h"
+
 #include "TankTrack.generated.h"
+
+class ASprungWheel;
+class USpawnPoint;
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class UDEMY_BATTLETANK_API UTankTrack : public UStaticMeshComponent
 {
 	GENERATED_BODY()
-	
+
 public:
 	UTankTrack();
-
-	void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable, Category = "Input")
 	void SetThrottle(float ThrottleValue);
 
-
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	float MaxDrivingForce = 120000000.0f;
+	UFUNCTION(BlueprintCallable, Category = "Driving")
+	TArray<ASprungWheel*> GetWheels() const;
 
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	UFUNCTION(BlueprintCallable, Category = "Driving")
+	TArray<USpawnPoint*> GetSpawnPoints() const;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float MaxDrivingForce = 80000000.0f;
 
 private:
-	void ApplySidewaysForce();
-	void DriveTrack();
-
-	float Throttle{0.0f};
+	void DriveTrack(float Throttle);
 };

@@ -5,10 +5,10 @@ using System.Collections.Generic;
 
 public class Udemy_BattleTankEditorTarget : TargetRules
 {
-	public Udemy_BattleTankEditorTarget( TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Editor;
+    public Udemy_BattleTankEditorTarget(TargetInfo Target) : base(Target)
+    {
+        Type = TargetType.Editor;
 
-		ExtraModuleNames.AddRange( new string[] { "Udemy_BattleTank" } );
-	}
+        ExtraModuleNames.AddRange(new string[] { "Udemy_BattleTank" });
+    }
 }

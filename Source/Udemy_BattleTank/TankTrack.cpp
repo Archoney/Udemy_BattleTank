@@ -1,47 +1,66 @@
 #include "TankTrack.h"
+
 #include "Components/PrimitiveComponent.h"
+#include "SpawnPoint.h"
+#include "SprungWheel.h"
 
 UTankTrack::UTankTrack()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UTankTrack::BeginPlay()
-{
-	Super::BeginPlay();
-
-	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
-}
-
 void UTankTrack::SetThrottle(float ThrottleValue)
 {
-	Throttle = FMath::Clamp(Throttle + ThrottleValue, -1.0f, 1.0f);
+	auto Throttle = FMath::Clamp(ThrottleValue, -1.0f, 1.0f);
+	DriveTrack(Throttle);
 }
 
-void UTankTrack::DriveTrack()
+TArray<ASprungWheel*> UTankTrack::GetWheels() const
 {
-	auto ForceApplied = GetForwardVector() * MaxDrivingForce * Throttle;
-	auto ForceLocation = GetComponentLocation();
+	TArray<ASprungWheel*> Wheels;
+	auto SpawnPoints = GetSpawnPoints();
 
-	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
-	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
+	for (auto SpawnPoint : SpawnPoints)
+	{
+		auto Wheel = Cast<ASprungWheel>(SpawnPoint->GetSpawnedActor());
+		if (Wheel)
+		{
+			Wheels.Add(Wheel);
+		}
+	}
+
+	return Wheels;
 }
 
-void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+TArray<USpawnPoint*> UTankTrack::GetSpawnPoints() const
 {
-	ApplySidewaysForce();
-	DriveTrack();
-	Throttle = 0.0f;
+	TArray<USpawnPoint*> SpawnPoints;
+	TArray<USceneComponent*> Children;
+	GetChildrenComponents(false, Children);
+
+	for (auto Child : Children)
+	{
+		auto SpawnPoint = Cast<USpawnPoint>(Child);
+		if (SpawnPoint)
+		{
+			SpawnPoints.Add(SpawnPoint);
+		}
+	}
+
+	return SpawnPoints;
 }
 
-void UTankTrack::ApplySidewaysForce()
+void UTankTrack::DriveTrack(float Throttle)
 {
-	auto SidewaysSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
-	auto CorrectionAcceleration = -SidewaysSpeed / GetWorld()->GetDeltaSeconds() * GetRightVector();
+	auto Wheels = GetWheels();
+	if (Wheels.Num() > 0)
+	{
+		auto Magnitude = MaxDrivingForce * Throttle;
+		auto ForcePerWheel = Magnitude / Wheels.Num();
 
-	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
-	auto CorrectionForceForOneTrack = CorrectionAcceleration * TankRoot->GetMass() / 2;
-
-	auto ForceLocation = GetComponentLocation();
-	TankRoot->AddForceAtLocation(CorrectionForceForOneTrack, ForceLocation);
+		for (auto Wheel : Wheels)
+		{
+			Wheel->AddDrivingForce(ForcePerWheel);
+		}
+	}
 }

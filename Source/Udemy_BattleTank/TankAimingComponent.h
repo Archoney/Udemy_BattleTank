@@ -1,7 +1,8 @@
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "CoreMinimal.h"
+
 #include "TankAimingComponent.generated.h"
 
 UENUM()
@@ -17,12 +18,12 @@ class UTankBarrel;
 class UTankTurret;
 class AProjectile;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class UDEMY_BATTLETANK_API UTankAimingComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	UTankAimingComponent();
 
 	void BeginPlay() override;
@@ -32,7 +33,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
 
-	void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	void TickComponent(float DeltaTime, enum ELevelTick TickType,
+		FActorComponentTickFunction* ThisTickFunction) override;
 
 	bool IsLocked() const;
 
@@ -41,7 +43,7 @@ public:
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Setup")
-	FiringState FiringState { FiringState::Reloading };
+	FiringState FiringState{FiringState::Reloading};
 
 	UPROPERTY(BlueprintReadWrite, Category = "Setup")
 	TSubclassOf<AProjectile> ProjectileBlueprint;
@@ -59,11 +61,10 @@ protected:
 	bool HighArc = false;
 
 private:
-	UTankBarrel* Barrel{ nullptr };
-	UTankTurret* Turret{ nullptr };
+	UTankBarrel* Barrel{nullptr};
+	UTankTurret* Turret{nullptr};
 
-
-	float TimeSinceLastFire{ 0.0f };
+	float TimeSinceLastFire{0.0f};
 
 	void MoveBarrelTowards(const FVector& Direction);
 	FVector AimDirection;

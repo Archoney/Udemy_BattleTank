@@ -1,14 +1,16 @@
 #include "TankAIController.h"
+
 #include "Engine/World.h"
-#include "TankPlayerController.h"
 #include "TankAimingComponent.h"
 #include "TankPawn.h"
+#include "TankPlayerController.h"
 
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto TankAimingComponent = GetPawn()->GetComponentByClass(UTankAimingComponent::StaticClass());
+	auto TankAimingComponent =
+		GetPawn()->GetComponentByClass(UTankAimingComponent::StaticClass());
 	check(TankAimingComponent && "ATankAIController - Tank Aiming Controller is null!");
 	AimingComponent = Cast<UTankAimingComponent>(TankAimingComponent);
 }
@@ -25,7 +27,7 @@ void ATankAIController::Tick(float DeltaSeconds)
 	{
 		auto MoveResult = MoveToActor(PlayerTank, FollowRadiusFromPlayer);
 
-		auto Target = PlayerTank->GetActorLocation() + FVector{ 0.0f, 0.0f, 120.0f };
+		auto Target = PlayerTank->GetActorLocation() + FVector{0.0f, 0.0f, 120.0f};
 		AimingComponent->AimAt(Target);
 
 		if (AimingComponent->IsLocked())
@@ -40,7 +42,8 @@ void ATankAIController::SetPawn(APawn* InPawn)
 	auto PossessedTank = Cast<ATankPawn>(InPawn);
 	if (PossessedTank)
 	{
-		PossessedTank->TankDestroyed.AddUniqueDynamic(this, &ATankAIController::OnTankDestroyed);
+		PossessedTank->TankDestroyed.AddUniqueDynamic(
+			this, &ATankAIController::OnTankDestroyed);
 	}
 }
 

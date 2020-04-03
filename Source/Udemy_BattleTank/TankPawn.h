@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+
 #include "TankPawn.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDestroyedDelegate);
@@ -16,8 +17,9 @@ public:
 
 	void BeginPlay() override;
 
-	float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-	
+	float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+		class AController* EventInstigator, AActor* DamageCauser) override;
+
 	UFUNCTION(BlueprintPure, Category = "Status")
 	float GetHealthPercent() const;
 
@@ -25,8 +27,8 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	int32 BaseHealth {100};
+	int32 BaseHealth{100};
 
 	UPROPERTY(VisibleAnywhere, Category = "Status")
-	int32 Health {BaseHealth};
+	int32 Health{BaseHealth};
 };

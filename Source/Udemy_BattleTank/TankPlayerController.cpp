@@ -1,6 +1,7 @@
 #include "TankPlayerController.h"
-#include "Engine/World.h"
+
 #include "Camera/PlayerCameraManager.h"
+#include "Engine/World.h"
 #include "TankAimingComponent.h"
 #include "TankPawn.h"
 
@@ -8,8 +9,10 @@ void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto TankAimingComponent = GetPawn()->GetComponentByClass(UTankAimingComponent::StaticClass());
-	check(TankAimingComponent && "ATankPlayerController - Tank Aiming Controller is null!");
+	auto TankAimingComponent =
+		GetPawn()->GetComponentByClass(UTankAimingComponent::StaticClass());
+	check(
+		TankAimingComponent && "ATankPlayerController - Tank Aiming Controller is null!");
 	AimingComponent = Cast<UTankAimingComponent>(TankAimingComponent);
 	AimingComponentReady(AimingComponent);
 }
@@ -32,7 +35,8 @@ void ATankPlayerController::SetPawn(APawn* InPawn)
 	auto PossessedTank = Cast<ATankPawn>(InPawn);
 	if (PossessedTank)
 	{
-		PossessedTank->TankDestroyed.AddUniqueDynamic(this, &ATankPlayerController::OnTankDestroyed);
+		PossessedTank->TankDestroyed.AddUniqueDynamic(
+			this, &ATankPlayerController::OnTankDestroyed);
 	}
 }
 
@@ -65,31 +69,29 @@ TOptional<FVector> ATankPlayerController::GetLookDirection() const
 		int32 ViewportSizeX, ViewportSizeY;
 		GetViewportSize(ViewportSizeX, ViewportSizeY);
 
-		auto crosshairViewportPosition = FVector2D{
-			ViewportSizeX * CrosshairCanvasPosition.GetValue().X,
-			ViewportSizeY * CrosshairCanvasPosition.GetValue().Y };
+		auto crosshairViewportPosition =
+			FVector2D{ViewportSizeX * CrosshairCanvasPosition.GetValue().X,
+				ViewportSizeY * CrosshairCanvasPosition.GetValue().Y};
 
 		FVector WorldLocation, WorldDirection;
-		DeprojectScreenPositionToWorld(
-			crosshairViewportPosition.X,
-			crosshairViewportPosition.Y,
-			WorldLocation,
-			WorldDirection
-		);
+		DeprojectScreenPositionToWorld(crosshairViewportPosition.X,
+			crosshairViewportPosition.Y, WorldLocation, WorldDirection);
 
 		return WorldDirection;
 	}
 	return TOptional<FVector>();
 }
 
-TOptional<FVector> ATankPlayerController::GetLookVectorHitLocation(const FVector& LookDirection) const
+TOptional<FVector> ATankPlayerController::GetLookVectorHitLocation(
+	const FVector& LookDirection) const
 {
 	FHitResult HitResult;
 	auto LineTraceStart = PlayerCameraManager->GetCameraLocation();
 	auto LineTraceLength = 1000000.0f;
 	auto LineTraceEnd = LineTraceStart + LookDirection * LineTraceLength;
 
-	if (GetWorld()->LineTraceSingleByChannel(HitResult, LineTraceStart, LineTraceEnd, ECC_Visibility))
+	if (GetWorld()->LineTraceSingleByChannel(
+			HitResult, LineTraceStart, LineTraceEnd, ECC_Camera))
 	{
 		return HitResult.Location;
 	}

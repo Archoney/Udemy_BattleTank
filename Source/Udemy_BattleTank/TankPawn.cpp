@@ -12,7 +12,8 @@ void ATankPawn::BeginPlay()
 	Health = BaseHealth;
 }
 
-float ATankPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+float ATankPawn::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
+	AController* EventInstigator, AActor* DamageCauser)
 {
 	int32 Damage = FPlatformMath::CeilToInt(DamageAmount);
 	int32 DamageToApply = FMath::Clamp(Damage, 0, BaseHealth);
